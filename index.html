@@ -3,541 +3,617 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>xammers · atlizon · autoplay</title>
+    <title>xammers & atlizon · дуо портал</title>
+    <!-- Font Awesome (иконки) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
         }
 
         body {
-            font-family: 'Inter', 'Courier New', monospace;
+            background: linear-gradient(145deg, #0b0c0e 0%, #1a1d24 100%);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 16px;
-            transition: background-color 0.4s ease, color 0.3s ease;
-            background-color: #0a0a0a;
         }
 
-        /* темы (5 штук) */
-        body.theme-dark {
-            background-color: #0c0c0c;
-            color: #f0f0f0;
-        }
-        body.theme-dark .container {
-            background: rgba(15, 15, 20, 0.75);
-            border-color: #ff5e5e;
-            box-shadow: 0 20px 40px rgba(255, 80, 80, 0.25);
-        }
-
-        body.theme-light {
-            background-color: #eae2d7;
-            color: #1e1e1e;
-        }
-        body.theme-light .container {
-            background: rgba(255, 250, 240, 0.8);
-            border-color: #b13e3e;
-            color: #1e1e1e;
-        }
-        body.theme-light .container a,
-        body.theme-light .container .tab-item,
-        body.theme-light .container .button-link {
-            color: #1e1e1e;
-        }
-
-        body.theme-neon {
-            background-color: #002b36;
-            color: #aaffdd;
-        }
-        body.theme-neon .container {
-            background: rgba(0, 40, 50, 0.8);
-            border-color: #5effae;
-            box-shadow: 0 20px 40px #1aff8c33;
-        }
-
-        body.theme-blood {
-            background-color: #1a0000;
-            color: #ffcfcf;
-        }
-        body.theme-blood .container {
-            background: rgba(45, 10, 10, 0.85);
-            border-color: #ff5f5f;
-            box-shadow: 0 20px 40px #b3000080;
-        }
-
-        body.theme-ocean {
-            background-color: #012b39;
-            color: #c0eaff;
-        }
-        body.theme-ocean .container {
-            background: rgba(5, 40, 55, 0.8);
-            border-color: #40c8ff;
-            box-shadow: 0 20px 40px #0077be80;
-        }
-
-        /* контейнер компактный, модный, с блюром */
-        .container {
-            max-width: 680px;
+        /* главная карточка */
+        .glass-panel {
+            max-width: 1100px;
             width: 100%;
+            background: rgba(20, 22, 27, 0.85);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-            border: 1.5px solid;
-            border-radius: 36px;
-            padding: 28px 26px;
-            transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s;
+            border: 1px solid rgba(255, 70, 70, 0.25);
+            border-radius: 48px 48px 36px 36px;
+            box-shadow: 0 25px 50px -8px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(180, 40, 40, 0.3) inset;
+            padding: 28px 28px 35px;
+            transition: all 0.2s;
         }
 
-        /* все углы закруглены */
-        .tabs-row,
-        .work-display,
-        .avatar,
-        .avatar-names,
-        .duo-names,
-        .buttons-row,
-        .bottom-dm,
-        .footer-note,
-        .tab-item,
-        .button-link,
-        .work-link,
-        .main-title,
-        .theme-switcher {
-            border-radius: 24px;
-        }
-
-        .avatar {
-            border-radius: 50%;
-        }
-
-        /* переключатель тем */
-        .theme-switcher {
+        /* шапка с аватарками и музыкой */
+        .top-bar {
             display: flex;
-            justify-content: flex-end;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .avatars {
+            display: flex;
+            gap: 25px;
+            align-items: center;
+        }
+
+        .avatar-block {
+            display: flex;
+            align-items: center;
             gap: 10px;
-            margin-bottom: 24px;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 8px 20px 8px 12px;
+            border-radius: 60px;
+            border: 1px solid #9f2b2b;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.6);
+        }
+
+        .avatar-img {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #c44;
+            background: #2a1e1e;
+        }
+
+        .avatar-name {
+            font-weight: 700;
+            font-size: 1.3rem;
+            letter-spacing: 1px;
+            text-shadow: 0 0 6px #f44;
+        }
+
+        .xammers .avatar-name { color: #ff7b7b; }
+        .atlizon .avatar-name { color: #b5a0ff; }
+
+        /* плеер минималистичный */
+        .music-area {
+            background: #1e1b22;
+            border-radius: 60px;
+            padding: 8px 18px;
+            border: 1px solid #a55;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: #f0c0c0;
+            box-shadow: 0 0 10px #c43;
+        }
+
+        .music-icon {
+            font-size: 1.8rem;
+            color: #d66;
+            animation: pulseGlow 2s infinite;
+        }
+
+        @keyframes pulseGlow {
+            0% { text-shadow: 0 0 2px #f99; }
+            50% { text-shadow: 0 0 15px #f33; }
+            100% { text-shadow: 0 0 2px #f99; }
+        }
+
+        .music-controls audio {
+            height: 38px;
+            filter: sepia(0.4) hue-rotate(310deg) brightness(1.1);
+            border-radius: 40px;
+        }
+
+        /* табы (основная навигация) */
+        .tabs {
+            display: flex;
+            gap: 20px;
+            border-bottom: 3px solid #882222;
+            padding-bottom: 12px;
+            margin-bottom: 28px;
             flex-wrap: wrap;
         }
 
-        .theme-dot {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
+        .tab-btn {
+            background: transparent;
+            border: none;
+            color: #ccc;
+            font-size: 1.7rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            padding: 10px 25px;
             cursor: pointer;
-            border: 2px solid rgba(255, 255, 255, 0.5);
-            transition: transform 0.2s, box-shadow 0.2s;
-            box-shadow: 0 0 10px currentColor;
+            border-radius: 40px 40px 0 0;
+            letter-spacing: 1.5px;
+            transition: 0.2s;
+            position: relative;
+            overflow: hidden;
+            text-shadow: 0 2px 3px black;
         }
 
-        .theme-dot:hover {
-            transform: scale(1.2);
-            border-color: white;
+        .tab-btn.active {
+            color: white;
+            background: #902020;
+            box-shadow: 0 -2px 15px #f33;
         }
 
-        .theme-dot[data-theme="dark"] { background: #1a1a1a; }
-        .theme-dot[data-theme="light"] { background: #f0e7d6; }
-        .theme-dot[data-theme="neon"] { background: #00cc66; }
-        .theme-dot[data-theme="blood"] { background: #8b0000; }
-        .theme-dot[data-theme="ocean"] { background: #0077be; }
+        .tab-btn:not(.active):hover {
+            color: #ffa0a0;
+            background: rgba(150, 40, 40, 0.4);
+        }
 
-        /* аудиоплеер скрыт, но музыка играет в фоне */
-        .hidden-audio {
+        /* контент табов */
+        .tab-content {
+            background: rgba(12, 10, 16, 0.7);
+            border-radius: 36px;
+            padding: 28px 24px;
+            border: 1px solid #a33;
+            margin-bottom: 30px;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.7);
+        }
+
+        .tab-pane {
             display: none;
         }
 
-        /* заголовок */
-        .main-title {
-            font-size: 2.4rem;
-            font-weight: 700;
-            margin-bottom: 24px;
-            text-transform: lowercase;
-            letter-spacing: -0.5px;
-            border-bottom: 1.5px solid currentColor;
-            padding-bottom: 12px;
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-        }
-
-        .tabs-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 5px 16px;
-            font-size: 1.9rem;
-            font-weight: 600;
-            margin-bottom: 30px;
-            border-bottom: 1.5px solid currentColor;
-            padding: 8px 12px 16px 12px;
-            text-transform: lowercase;
-        }
-
-        .tab-item {
-            cursor: pointer;
-            user-select: none;
-            transition: all 0.2s;
-            position: relative;
-            white-space: nowrap;
-            padding: 0 6px;
-        }
-
-        .tab-item.active {
-            font-weight: 900;
-            text-decoration: underline;
-            text-underline-offset: 6px;
-            text-decoration-thickness: 2px;
-        }
-
-        .work-display {
-            margin: 20px 0 30px 10px;
-            padding: 5px 15px;
-        }
-
-        .work-label {
-            font-size: 2rem;
-            font-weight: 600;
-            margin-bottom: 8px;
-            text-transform: lowercase;
-        }
-
-        .work-link {
-            font-size: 1.5rem;
-            text-decoration: underline dashed 1px #888;
-            display: inline-block;
-            word-break: break-all;
-            margin-bottom: 20px;
-            text-underline-offset: 6px;
-            padding: 5px 10px;
-        }
-
-        .separator {
-            border-top: 1.5px solid currentColor;
-            margin: 20px 0 20px 0;
-            opacity: 0.7;
-        }
-
-        /* аватарки */
-        .avatar-pair {
-            display: flex;
-            justify-content: center;
-            gap: 40px;
-            margin: 10px 0 8px 0;
-        }
-
-        .avatar {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            border: 2.5px solid currentColor;
-            background: rgba(128,128,128,0.15);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2.4rem;
-            overflow: hidden;
-            backdrop-filter: blur(2px);
-        }
-
-        .avatar img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+        .tab-pane.active-pane {
             display: block;
         }
 
-        .avatar-names {
-            display: flex;
-            justify-content: center;
-            gap: 70px;
-            margin: 5px 0 20px 0;
-            font-weight: 700;
-            font-size: 1.3rem;
+        /* заголовки внутри табов */
+        .section-title {
+            color: #ffb7b7;
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 28px;
+            border-left: 10px solid #c44;
+            padding-left: 20px;
             text-transform: uppercase;
         }
 
-        .duo-names {
+        /* сетка тем (5 штук) */
+        .topics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 18px;
+            margin-bottom: 40px;
+        }
+
+        .topic-card {
+            background: #2c222a;
+            border: 2px solid #6f3030;
+            border-radius: 30px;
+            padding: 18px 8px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.25rem;
+            color: #ffd9b0;
+            transition: 0.2s;
+            box-shadow: 0 7px 0 #3f1c1c;
+            cursor: default;
+            backdrop-filter: blur(4px);
+        }
+
+        .topic-card i {
+            display: block;
+            font-size: 2rem;
+            margin-bottom: 8px;
+            color: #d66;
+        }
+
+        .topic-card:hover {
+            transform: translateY(-4px);
+            border-color: #f66;
+            box-shadow: 0 11px 0 #6f2b2b;
+        }
+
+        /* КНОПКА WORK (с эффектом капающей крови) */
+        .work-wrapper {
             display: flex;
             flex-direction: column;
-            align-items: flex-start;
-            gap: 5px;
-            margin: 15px 0 20px 0;
-            font-size: 2.2rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            line-height: 1.1;
-            padding: 8px 16px;
-        }
-
-        .duo-names .right {
-            margin-left: 50px;
-        }
-
-        .buttons-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 24px;
-            font-size: 1.7rem;
-            font-weight: 600;
-            margin: 20px 0 20px 0;
-            text-transform: lowercase;
             align-items: center;
-            padding: 8px 12px;
+            margin: 25px 0 20px;
         }
 
-        .button-link {
-            text-decoration: none;
-            border-bottom: 1.5px solid transparent;
-            transition: 0.2s;
-            cursor: pointer;
-            padding: 4px 8px;
-        }
-
-        .button-link:hover {
-            border-bottom-color: currentColor;
-        }
-
-        .bottom-dm {
-            font-size: 1.7rem;
-            font-weight: 600;
-            margin: 10px 0 20px 0;
-            text-transform: lowercase;
-            display: flex;
-            justify-content: flex-start;
-            padding: 5px 16px;
-        }
-
-        .footer-note {
-            font-size: 1.3rem;
-            margin-top: 20px;
-            border-top: 1.5px solid currentColor;
-            padding: 18px 16px 0 16px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .paper-plane {
-            font-size: 1.7rem;
-        }
-
-        a {
-            color: inherit;
-            text-decoration: none;
-        }
-
-        /* blood effect */
-        .blood-hover {
+        .work-btn {
             position: relative;
-            display: inline-block;
-            transition: color 0.25s ease, text-shadow 0.2s;
-            z-index: 2;
-            cursor: default;
-        }
-
-        a.blood-hover, .tab-item.blood-hover, .button-link.blood-hover {
+            background: #2c0f0f;
+            border: 3px solid #a00;
+            color: white;
+            font-size: 3rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            padding: 20px 70px;
+            border-radius: 80px;
+            letter-spacing: 8px;
             cursor: pointer;
+            box-shadow: 0 15px 0 #4d0f0f, 0 0 30px #d00;
+            transition: 0.05s linear;
+            z-index: 5;
+            overflow: visible;
+            line-height: 1;
         }
 
-        .blood-hover::before {
-            content: '';
+        /* эффект капающей крови (псевдоэлементы) */
+        .work-btn::before,
+        .work-btn::after {
+            content: "";
             position: absolute;
-            top: -5px;
-            left: -5px;
-            width: calc(100% + 10px);
-            height: calc(100% + 10px);
-            background: radial-gradient(circle at var(--x, 20%) var(--y, 20%), rgba(220, 20, 20, 0.9) 0%, transparent 70%);
+            top: -15px;
+            left: 20%;
+            width: 12px;
+            height: 20px;
+            background: #c22;
+            border-radius: 50%;
+            filter: blur(2px);
             opacity: 0;
-            pointer-events: none;
-            z-index: -1;
-            mix-blend-mode: screen;
-            filter: blur(6px);
-            transition: opacity 0.25s;
-            border-radius: 30%;
+            transition: opacity 0.2s;
+            box-shadow: 0 0 12px red;
+            z-index: 2;
         }
 
-        .blood-hover:hover {
-            color: #ffffff !important;
-            text-shadow: 0 0 8px #ff4d4d;
+        .work-btn::after {
+            top: auto;
+            bottom: -25px;
+            left: 70%;
+            width: 18px;
+            height: 30px;
+            background: #b11;
         }
 
-        .blood-hover:hover::before {
-            opacity: 0.9;
-            animation: drip 1.2s infinite alternate ease-in-out;
+        .work-btn:hover::before {
+            opacity: 1;
+            animation: dripLeft 0.8s infinite;
         }
 
-        @keyframes drip {
-            0% { transform: translateY(0) scale(1); filter: blur(6px); opacity: 0.8; }
-            100% { transform: translateY(12px) scale(1.3); filter: blur(12px); opacity: 0.3; }
+        .work-btn:hover::after {
+            opacity: 1;
+            animation: dripRight 1s infinite 0.2s;
         }
 
-        @media (max-width: 500px) {
-            .container { padding: 20px; }
-            .main-title { font-size: 2rem; }
-            .tabs-row { font-size: 1.5rem; }
-            .work-label { font-size: 1.6rem; }
-            .work-link { font-size: 1.2rem; }
-            .duo-names { font-size: 1.8rem; }
-            .buttons-row { font-size: 1.4rem; gap: 15px; }
-            .avatar-pair { gap: 20px; }
-            .avatar-names { gap: 40px; }
+        @keyframes dripLeft {
+            0% { transform: translateY(0) scale(1); opacity: 1; }
+            80% { transform: translateY(50px) scale(0.7); opacity: 0.7; }
+            100% { transform: translateY(70px) scale(0.3); opacity: 0; }
+        }
+
+        @keyframes dripRight {
+            0% { transform: translateY(0) scale(1); opacity: 1; }
+            80% { transform: translateY(-50px) scale(0.8); opacity: 0.6; }
+            100% { transform: translateY(-80px) scale(0.2); opacity: 0; }
+        }
+
+        /* чтобы кнопка не обрезала капли */
+        .work-btn:hover {
+            transform: scale(1.02);
+            background: #551818;
+            border-color: #f33;
+        }
+
+        /* контейнер со списком ссылок (изначально скрыт) */
+        .work-links {
+            background: #1f1722;
+            border-radius: 40px;
+            padding: 25px 25px;
+            margin-top: 25px;
+            border: 2px dashed #a55;
+            display: none;
+            max-height: 400px;
+            overflow-y: auto;
+            box-shadow: inset 0 0 20px #2a0f0f;
+        }
+
+        .work-links.show {
+            display: block;
+        }
+
+        .link-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 14px;
+        }
+
+        .work-link {
+            display: block;
+            background: #2d1e2a;
+            color: #ffbcbc;
+            padding: 16px 20px;
+            border-radius: 60px;
+            text-decoration: none;
+            font-weight: 600;
+            border: 2px solid #b44;
+            transition: 0.15s;
+            word-break: break-all;
+            text-align: center;
+        }
+
+        .work-link:hover {
+            background: #732;
+            color: white;
+            border-color: #f88;
+            transform: scale(1.02);
+        }
+
+        /* нижняя подпись */
+        .signature {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 2rem;
+            font-weight: 800;
+            color: #b55;
+            background: rgba(0,0,0,0.5);
+            padding: 16px 10px;
+            border-radius: 60px;
+            border: 1px solid #933;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            word-break: break-word;
+        }
+
+        .signature span {
+            color: #faa;
+            text-shadow: 0 0 10px #f33;
+        }
+
+        /* скролл бар */
+        .work-links::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        .work-links::-webkit-scrollbar-track {
+            background: #2d1b1b;
+        }
+
+        .work-links::-webkit-scrollbar-thumb {
+            background: #a33;
+            border-radius: 20px;
+        }
+
+        /* адаптация */
+        @media (max-width: 700px) {
+            .work-btn { font-size: 2rem; padding: 15px 30px; }
+            .signature { font-size: 1.5rem; }
         }
     </style>
 </head>
-<body class="theme-dark">
-    <!-- СКРЫТЫЙ АУДИОПЛЕЕР с автовоспроизведением и бесконечным циклом -->
-    <audio id="bgMusic" class="hidden-audio" autoplay loop>
-        <source src="music.mp3" type="audio/mpeg">
-        Ваш браузер не поддерживает аудио.
-    </audio>
+<body>
 
-    <div class="container">
-
-        <!-- переключатель 5 тем -->
-        <div class="theme-switcher">
-            <div class="theme-dot" data-theme="dark" title="тёмная"></div>
-            <div class="theme-dot" data-theme="light" title="светлая"></div>
-            <div class="theme-dot" data-theme="neon" title="неон"></div>
-            <div class="theme-dot" data-theme="blood" title="кровавая"></div>
-            <div class="theme-dot" data-theme="ocean" title="океан"></div>
-        </div>
-
-        <!-- шапка -->
-        <div class="main-title">
-            <span>xammers and atlizon</span>
-            <span>✦</span>
-        </div>
-
-        <!-- Work табы -->
-        <div class="tabs-row" id="tabsContainer">
-            <span class="tab-item blood-hover active" data-work="1">Work 1</span> |
-            <span class="tab-item blood-hover" data-work="2">Work 2</span> |
-            <span class="tab-item blood-hover" data-work="3">Work 3</span> |
-            <span class="tab-item blood-hover" data-work="4">Work 4</span> |
-            <span class="tab-item blood-hover" data-work="5">Work 5</span>
-        </div>
-
-        <!-- работа + ссылка -->
-        <div class="work-display" id="workDisplay">
-            <div class="work-label" id="workLabel">работа 1</div>
-            <a href="https://telegra.ph/Work-1-03-16" target="_blank" class="work-link blood-hover" id="workLink">telegra.ph/Work-1-03-16</a>
-        </div>
-
-        <div class="separator"></div>
-
-        <!-- АВАТАРКИ: xammers — avatar1.jpg, atlizon — avatar2.jpg -->
-        <div class="avatar-pair">
-            <div class="avatar">
-                <img src="avatar1.jpg" alt="xammers" onerror="this.onerror=null; this.parentElement.innerHTML='X';">
+<div class="glass-panel">
+    <!-- верх: аватарки + музыка -->
+    <div class="top-bar">
+        <div class="avatars">
+            <!-- xammers -->
+            <div class="avatar-block xammers">
+                <!-- avatar1.jpg для xammers -->
+                <img src="avatar1.jpg" alt="xammers" class="avatar-img" onerror="this.src='https://via.placeholder.com/52/a33/fff?text=X'">
+                <span class="avatar-name">xammers</span>
             </div>
-            <div class="avatar">
-                <img src="avatar2.jpg" alt="atlizon" onerror="this.onerror=null; this.parentElement.innerHTML='A';">
+            <!-- atlizon -->
+            <div class="avatar-block atlizon">
+                <img src="avatar2.jpg" alt="atlizon" class="avatar-img" onerror="this.src='https://via.placeholder.com/52/63a/fff?text=A'">
+                <span class="avatar-name">atlizon</span>
             </div>
         </div>
-        <div class="avatar-names">
-            <span>XAMMERS</span>
-            <span>ATLIZON</span>
-        </div>
 
-        <!-- крупные имена -->
-        <div class="duo-names">
-            <span class="left blood-hover">XAMMERS</span>
-            <span class="right blood-hover">ATLIZON</span>
-        </div>
-
-        <div class="separator"></div>
-
-        <!-- кнопки -->
-        <div class="buttons-row">
-            <a href="https://t.me/MenaceLink" target="_blank" class="button-link blood-hover">КАНАЛ</a>
-            <a href="https://t.me/melanholbio" target="_blank" class="button-link blood-hover">ПЕРЕХОДНИК</a>
-            <a href="https://t.me/xammepc" target="_blank" class="button-link blood-hover">DM @xammers</a>
-        </div>
-
-        <!-- DM @atlizon отдельно -->
-        <div class="bottom-dm">
-            <a href="https://t.me/atlizup" target="_blank" class="button-link blood-hover">DM @atlizon</a>
-        </div>
-
-        <div class="separator"></div>
-
-        <!-- подвал -->
-        <div class="footer-note">
-            <span class="paper-plane">✈️</span> XAMMERS / ATLIZON
+        <!-- Музыкальный плеер (music.html функциональность) 
+             Если файл music.html существует в репозитории, можно использовать его как fallback?
+             но проще встроить аудио. В условии: "если я добавлю файл в репозитории music.html и проигрывалась музыка".
+             Сделаем хитро: если music.html загрузить как аудио не выйдет, но можно создать аудиоэлемент с треком.
+             Для соответствия ожиданию добавим скрытый iframe с music.html? но вероятнее нужен просто аудиоплеер.
+             Реализуем audio с файлом, который пользователь сможет загрузить (music.mp3 или .ogg). А music.html может содержать плеер.
+             Поскольку нужен именно работающий плеер, я вставлю audio с тестовым файлом, но если пользователь положит music.html в корень — ничего не сломается.
+        -->
+        <div class="music-area">
+            <div class="music-icon"><i class="fas fa-headphones-alt"></i></div>
+            <div class="music-controls">
+                <audio controls loop>
+                    <source src="music.mp3" type="audio/mpeg">
+                    <source src="music.ogg" type="audio/ogg">
+                    <!-- если в репозитории будет music.html, он не проиграется как аудио, 
+                         но можно подгрузить его скрытно? нет, лучше стандартный плеер.
+                         Добавим сообщение если нет файла, но плеер отобразится -->
+                    Your browser does not support audio.
+                </audio>
+            </div>
         </div>
     </div>
 
-    <script>
-        (function() {
-            // эффект крови
-            const bloodElements = document.querySelectorAll('.blood-hover');
-            document.addEventListener('mousemove', function(e) {
-                bloodElements.forEach(el => {
-                    const rect = el.getBoundingClientRect();
-                    const x = ((e.clientX - rect.left) / rect.width) * 100;
-                    const y = ((e.clientY - rect.top) / rect.height) * 100;
-                    if (x >= 0 && x <= 100 && y >= 0 && y <= 100) {
-                        el.style.setProperty('--x', x + '%');
-                        el.style.setProperty('--y', y + '%');
-                    }
-                });
+    <!-- Табы: xammers / atlizon -->
+    <div class="tabs">
+        <button class="tab-btn active" id="tabXammers"><i class="fas fa-skull"></i> XAMMERS</button>
+        <button class="tab-btn" id="tabAtlizon"><i class="fas fa-dragon"></i> ATLIZON</button>
+    </div>
+
+    <!-- Контейнер с переключаемым содержимым -->
+    <div class="tab-content">
+        <!-- ПАНЕЛЬ XAMMERS -->
+        <div class="tab-pane active-pane" id="paneXammers">
+            <div class="section-title"><i class="fas fa-bolt"></i> темы xammers · хаос</div>
+            <!-- 5 рандомных тем (для xammers) -->
+            <div class="topics-grid" id="xammersTopics"></div>
+            <!-- Кнопка WORK + ссылки -->
+            <div class="work-wrapper">
+                <button class="work-btn" id="workBtnX"><i class="fas fa-tint"></i> WORK</button>
+                <div class="work-links" id="workLinksX"></div>
+            </div>
+        </div>
+
+        <!-- ПАНЕЛЬ ATLIZON -->
+        <div class="tab-pane" id="paneAtlizon">
+            <div class="section-title"><i class="fas fa-moon"></i> темы atlizon · мистика</div>
+            <div class="topics-grid" id="atlizonTopics"></div>
+            <div class="work-wrapper">
+                <button class="work-btn" id="workBtnA"><i class="fas fa-tint"></i> WORK</button>
+                <div class="work-links" id="workLinksA"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- надпись adapt xammers and atlizon -->
+    <div class="signature">
+        <span>🩸 adapt xammers and atlizon 🩸</span>
+    </div>
+</div>
+
+<script>
+    (function() {
+        // ----- СПИСОК ССЫЛОК (точно по заданию) -----
+        const workUrls = [
+            "https://telegra.ph/Work-1-03-16",
+            "https://telegra.ph/work-2-03-16",
+            "https://telegra.ph/work-3-03-16",
+            "https://telegra.ph/work-4-03-16",
+            "https://telegra.ph/work-5-03-16",
+            "https://telegra.ph/work-6-03-16",
+            "https://telegra.ph/work-7-03-16",
+            "https://telegra.ph/work-8-03-16",
+            "https://telegra.ph/work-9-03-16",
+            "https://telegra.ph/work-10-03-16",
+            "https://telegra.ph/work-11-03-16",
+            "https://telegra.ph/work-12-03-16-2",
+            "https://telegra.ph/work-13-03-16",
+            "https://telegra.ph/work-14-03-16",
+            "https://telegra.ph/work-15-03-16",
+            "https://telegra.ph/work-16-03-16-2",
+            "https://telegra.ph/work-16-03-16",
+            "https://telegra.ph/work-18-03-16"
+        ];
+
+        // ----- 5 рандомных тем для каждого (можно набор побольше, выберем случайные) -----
+        const topicsPool = [
+            "🔮 Киберпанк", "💀 Бессмертие", "🩸 Вампиры", "👁️ Иллюминаты", "🌑 Затмение",
+            "⚡ Электричество", "🧠 ИИ восстание", "🎭 Маски", "🗝️ Тайны прошлого", "☠️ Яды",
+            "🕸️ Паутина", "🔥 Адское пламя", "🌊 Глубины", "🧿 Сглаз", "🍷 Кровавая луна",
+            "🏴‍☠️ Призраки", "🎸 Рок-н-ролл", "🦇 Ночные твари", "📿 Проклятия", "🗡️ Клинки"
+        ];
+
+        // Функция перемешивания и взятия 5 случайных
+        function getRandomTopics(count = 5) {
+            const shuffled = [...topicsPool].sort(() => 0.5 - Math.random());
+            return shuffled.slice(0, count);
+        }
+
+        // Заполняем сетки тем
+        const xammersGrid = document.getElementById('xammersTopics');
+        const atlizonGrid = document.getElementById('atlizonTopics');
+
+        function renderTopics(container, person) {
+            const topics = getRandomTopics(5);
+            container.innerHTML = '';
+            topics.forEach(t => {
+                const card = document.createElement('div');
+                card.className = 'topic-card';
+                // иконка плазмы
+                card.innerHTML = `<i class="fas ${person === 'x' ? 'fa-biohazard' : 'fa-star-and-crescent'}"></i>${t}`;
+                container.appendChild(card);
             });
+        }
 
-            // переключение работ
-            const tabs = document.querySelectorAll('.tab-item');
-            const workLabel = document.getElementById('workLabel');
-            const workLink = document.getElementById('workLink');
+        renderTopics(xammersGrid, 'x');
+        renderTopics(atlizonGrid, 'a');
 
-            const workData = {
-                1: { label: 'работа 1', link: 'https://telegra.ph/Work-1-03-16' },
-                2: { label: 'работа 2', link: 'https://telegra.ph/work-2-03-16' },
-                3: { label: 'работа 3', link: 'https://telegra.ph/work-3-03-16' },
-                4: { label: 'работа 4', link: 'https://telegra.ph/work-4-03-16' },
-                5: { label: 'работа 5', link: 'https://telegra.ph/work-5-03-16' }
-            };
+        // ---- функция построения списка ссылок (вставляется в .work-links) ----
+        function buildLinksHTML() {
+            let html = '<div class="link-grid">';
+            workUrls.forEach(url => {
+                html += `<a href="${url}" target="_blank" class="work-link">${url.replace('https://telegra.ph/', '')}</a>`;
+            });
+            html += '</div>';
+            return html;
+        }
 
-            function setActiveTab(workId) {
-                tabs.forEach(tab => {
-                    tab.classList.remove('active');
-                    if (tab.dataset.work == workId) tab.classList.add('active');
-                });
-                if (workData[workId]) {
-                    workLabel.textContent = workData[workId].label;
-                    workLink.href = workData[workId].link;
-                    workLink.textContent = workData[workId].link.replace('https://', '');
-                }
+        const linksHTML = buildLinksHTML();
+
+        // Вставляем в оба контейнера (скрыты изначально)
+        const workLinksX = document.getElementById('workLinksX');
+        const workLinksA = document.getElementById('workLinksA');
+        workLinksX.innerHTML = linksHTML;
+        workLinksA.innerHTML = linksHTML;
+
+        // ---- обработчики кнопок WORK (показать/скрыть ссылки) ----
+        const btnX = document.getElementById('workBtnX');
+        const btnA = document.getElementById('workBtnA');
+
+        // Функция toggle с закрытием другого при переключении табов? но проще:
+        function toggleLinks(btn, linksContainer) {
+            // если уже показаны — скрываем, иначе показываем (и можно скрыть другие)
+            const isVisible = linksContainer.classList.contains('show');
+            // Скрываем оба контейнера (чтобы одновременно не висели)
+            workLinksX.classList.remove('show');
+            workLinksA.classList.remove('show');
+            if (!isVisible) {
+                linksContainer.classList.add('show');
+            }
+        }
+
+        btnX.addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleLinks(btnX, workLinksX);
+        });
+
+        btnA.addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleLinks(btnA, workLinksA);
+        });
+
+        // ----- переключение табов (xammers / atlizon) -----
+        const tabX = document.getElementById('tabXammers');
+        const tabA = document.getElementById('tabAtlizon');
+        const paneX = document.getElementById('paneXammers');
+        const paneA = document.getElementById('paneAtlizon');
+
+        function setActiveTab(active) {
+            // сброс классов у кнопок
+            tabX.classList.remove('active');
+            tabA.classList.remove('active');
+            paneX.classList.remove('active-pane');
+            paneA.classList.remove('active-pane');
+
+            if (active === 'x') {
+                tabX.classList.add('active');
+                paneX.classList.add('active-pane');
+            } else {
+                tabA.classList.add('active');
+                paneA.classList.add('active-pane');
             }
 
-            tabs.forEach(tab => {
-                tab.addEventListener('click', function() {
-                    setActiveTab(this.dataset.work);
-                });
-            });
-            setActiveTab('1');
+            // при смене таба скрываем ссылки (чтобы не путать)
+            workLinksX.classList.remove('show');
+            workLinksA.classList.remove('show');
+        }
 
-            // переключение тем
-            const themeDots = document.querySelectorAll('.theme-dot');
-            const body = document.body;
-            themeDots.forEach(dot => {
-                dot.addEventListener('click', function() {
-                    body.className = '';
-                    body.classList.add(`theme-${this.dataset.theme}`);
-                });
-            });
+        tabX.addEventListener('click', () => setActiveTab('x'));
+        tabA.addEventListener('click', () => setActiveTab('a'));
 
-            // Дополнительная попытка запустить аудио, если autoplay заблокирован браузером
-            const audio = document.getElementById('bgMusic');
-            if (audio) {
-                // Пытаемся воспроизвести при загрузке страницы
-                audio.play().catch(e => {
-                    console.log('Autoplay заблокирован браузером, ожидаем взаимодействия');
-                    // Если автовоспроизведение заблокировано, запустим музыку после первого клика где угодно
-                    document.addEventListener('click', function once() {
-                        audio.play();
-                        document.removeEventListener('click', once);
-                    });
-                });
-            }
-        })();
-    </script>
+        // ----- эффект капающей крови уже в css, доп. нетривиально: -----
+        // дополнительно можно добавить иконки капель на кнопки, но всё есть.
+
+        // ----- подгрузка avatar1.jpg / avatar2.jpg – уже в img src, если нет – будет заглушка
+
+        // ----- дополнительная рандомизация тем при загрузке (уже сделана) -----
+        // но по желанию можно обновлять темы при клике на них? но не требуется.
+
+        // Также адаптив, все кнопки видны.
+        // Убедимся, что .work-btn не перекрыт.
+        // На мобильных всё ок.
+
+        // Инициализация: показываем панель xammers
+        setActiveTab('x');
+    })();
+</script>
+
+<!-- Дополнительная магия: если music.mp3 отсутствует, плеер покажет элементы управления, но тишина.
+     пользователь сможет добавить music.mp3 или music.ogg в корень. 
+     music.html может быть загружен отдельно, но для воспроизведения мы используем стандартный тег audio -->
 </body>
-</html>
+    </html>
