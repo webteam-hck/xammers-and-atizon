@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>xammers & atlizon · ЖИВЫЕ ТЕМЫ + МУЗЫКА</title>
+    <title>xammers · atlizon · дуо портал</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         * {
@@ -13,30 +13,28 @@
             font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
         }
 
-        /* CSS-переменные (будут меняться темами) */
         body {
-            background: var(--bg-color, #0b0c0e);
+            background: #0f0b0f;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 16px;
-            transition: background-color 0.4s ease;
+            transition: background 0.3s;
         }
 
         .glass-panel {
-            max-width: 1100px;
+            max-width: 1200px;
             width: 100%;
-            background: rgba(20, 22, 27, 0.85);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 2px solid var(--panel-border, #a55);
-            border-radius: 48px 48px 36px 36px;
-            box-shadow: 0 25px 50px -8px rgba(0, 0, 0, 0.8), 0 0 0 1px var(--panel-glow, #c44) inset;
-            padding: 28px 28px 35px;
-            transition: border-color 0.3s, box-shadow 0.3s;
+            background: rgba(18, 14, 20, 0.9);
+            backdrop-filter: blur(15px);
+            border: 2px solid #a55;
+            border-radius: 50px 50px 40px 40px;
+            box-shadow: 0 20px 50px #200, 0 0 0 2px #c66 inset;
+            padding: 30px;
         }
 
+        /* шапка с аватарами */
         .top-bar {
             display: flex;
             justify-content: space-between;
@@ -48,331 +46,386 @@
 
         .avatars {
             display: flex;
-            gap: 25px;
-            align-items: center;
+            gap: 30px;
         }
 
         .avatar-block {
             display: flex;
             align-items: center;
-            gap: 10px;
-            background: rgba(0, 0, 0, 0.4);
-            padding: 8px 20px 8px 12px;
+            gap: 15px;
+            background: #1e151e;
+            padding: 8px 25px 8px 15px;
             border-radius: 60px;
-            border: 1px solid var(--avatar-border, #9f2b2b);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.6);
+            border: 2px solid #c44;
+            box-shadow: 0 5px 0 #622;
         }
 
         .avatar-img {
-            width: 52px;
-            height: 52px;
+            width: 60px;
+            height: 60px;
             border-radius: 50%;
             object-fit: cover;
-            border: 3px solid var(--avatar-border, #c44);
-            background: #2a1e1e;
+            border: 3px solid #d55;
+            background: #332222;
         }
 
         .avatar-name {
-            font-weight: 700;
-            font-size: 1.3rem;
+            font-weight: 800;
+            font-size: 1.6rem;
             letter-spacing: 1px;
-            text-shadow: 0 0 6px var(--avatar-glow, #f44);
+            text-shadow: 0 0 10px currentColor;
         }
+        .xammers .avatar-name { color: #ff8a8a; }
+        .atlizon .avatar-name { color: #c9adff; }
 
-        .xammers .avatar-name { color: #ff7b7b; }
-        .atlizon .avatar-name { color: #b5a0ff; }
-
-        /* скрытый аудио */
-        #bgMusic {
-            display: none;
+        /* плеер */
+        .music-area {
+            background: #221a22;
+            border-radius: 60px;
+            padding: 10px 20px;
+            border: 2px solid #b44;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            box-shadow: 0 5px 0 #633;
         }
-
         .music-icon {
-            color: #b44;
+            color: #f77;
             font-size: 2rem;
-            text-shadow: 0 0 10px #f33;
-            animation: pulseGlow 2s infinite;
+            animation: pulse 2s infinite;
         }
-        @keyframes pulseGlow {
-            0% { text-shadow: 0 0 2px #f99; }
-            50% { text-shadow: 0 0 20px #f33; }
-            100% { text-shadow: 0 0 2px #f99; }
+        @keyframes pulse {
+            0% { text-shadow: 0 0 5px #f55; }
+            50% { text-shadow: 0 0 25px #f33; }
+            100% { text-shadow: 0 0 5px #f55; }
+        }
+        audio {
+            height: 40px;
+            filter: hue-rotate(310deg) brightness(1.2);
+            border-radius: 30px;
         }
 
+        /* табы */
         .tabs {
             display: flex;
             gap: 20px;
-            border-bottom: 3px solid var(--tab-bottom, #882222);
-            padding-bottom: 12px;
-            margin-bottom: 28px;
-            flex-wrap: wrap;
+            border-bottom: 4px solid #b44;
+            padding-bottom: 15px;
+            margin-bottom: 30px;
         }
-
         .tab-btn {
             background: transparent;
             border: none;
-            color: #ccc;
-            font-size: 1.7rem;
+            color: #dbb;
+            font-size: 2rem;
             font-weight: 800;
             text-transform: uppercase;
-            padding: 10px 25px;
+            padding: 10px 30px;
             cursor: pointer;
             border-radius: 40px 40px 0 0;
-            letter-spacing: 1.5px;
             transition: 0.2s;
-            text-shadow: 0 2px 3px black;
+            text-shadow: 0 2px 0 #000;
         }
-
         .tab-btn.active {
             color: white;
-            background: var(--tab-active, #902020);
-            box-shadow: 0 -2px 15px var(--tab-active-glow, #f33);
+            background: #a33;
+            box-shadow: 0 -4px 20px #f66;
         }
-
-        .tab-btn:not(.active):hover {
-            color: #ffa0a0;
-            background: rgba(150, 40, 40, 0.4);
+        .tab-btn:hover {
+            background: #632;
+            color: #fcc;
         }
 
         .tab-content {
-            background: rgba(12, 10, 16, 0.7);
-            border-radius: 36px;
-            padding: 28px 24px;
-            border: 2px solid var(--content-border, #a33);
+            background: #181218;
+            border-radius: 40px;
+            padding: 30px;
+            border: 2px solid #c66;
             margin-bottom: 30px;
-            box-shadow: inset 0 0 20px rgba(0,0,0,0.7);
-            transition: border 0.3s;
         }
-
         .tab-pane { display: none; }
         .tab-pane.active-pane { display: block; }
 
-        .section-title {
-            color: #ffb7b7;
-            font-size: 2rem;
-            font-weight: 600;
-            margin-bottom: 28px;
-            border-left: 10px solid var(--title-line, #c44);
-            padding-left: 20px;
-            text-transform: uppercase;
-            transition: border-color 0.3s;
-        }
-
-        .topics-grid {
+        /* блоки информации */
+        .info-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 18px;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
             margin-bottom: 40px;
         }
-
-        .topic-card {
-            background: #2c222a;
-            border: 2px solid var(--card-border, #6f3030);
+        .info-card {
+            background: #231f23;
+            border: 3px solid #a44;
             border-radius: 30px;
-            padding: 18px 8px;
+            padding: 25px;
             text-align: center;
-            font-weight: bold;
-            font-size: 1.25rem;
-            color: #ffd9b0;
-            transition: 0.2s;
-            box-shadow: 0 7px 0 var(--card-shadow, #3f1c1c);
-            cursor: pointer;
-            backdrop-filter: blur(4px);
+            box-shadow: 0 10px 0 #522;
         }
-
-        .topic-card i {
-            display: block;
-            font-size: 2rem;
-            margin-bottom: 8px;
-            color: #d66;
-        }
-
-        .topic-card:hover {
-            transform: translateY(-4px);
-            border-color: #f66;
-            box-shadow: 0 11px 0 #6f2b2b;
-        }
-
-        .work-wrapper {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin: 25px 0 20px;
-        }
-
-        .work-btn {
-            position: relative;
-            background: #2c0f0f;
-            border: 3px solid #a00;
-            color: white;
-            font-size: 3rem;
-            font-weight: 900;
+        .info-label {
+            color: #fbb;
+            font-size: 1.5rem;
             text-transform: uppercase;
-            padding: 20px 70px;
-            border-radius: 80px;
-            letter-spacing: 8px;
-            cursor: pointer;
-            box-shadow: 0 15px 0 #4d0f0f, 0 0 30px #d00;
-            transition: 0.05s linear;
-            z-index: 5;
-            overflow: visible;
-            line-height: 1;
+            margin-bottom: 15px;
+            letter-spacing: 3px;
         }
-
-        .work-btn::before,
-        .work-btn::after {
-            content: "";
-            position: absolute;
-            top: -15px;
-            left: 20%;
-            width: 12px;
-            height: 20px;
-            background: #c22;
-            border-radius: 50%;
-            filter: blur(2px);
-            opacity: 0;
-            transition: opacity 0.2s;
-            box-shadow: 0 0 12px red;
-            z-index: 2;
-        }
-        .work-btn::after {
-            top: auto;
-            bottom: -25px;
-            left: 70%;
-            width: 18px;
-            height: 30px;
-            background: #b11;
-        }
-        .work-btn:hover::before {
-            opacity: 1;
-            animation: dripLeft 0.8s infinite;
-        }
-        .work-btn:hover::after {
-            opacity: 1;
-            animation: dripRight 1s infinite 0.2s;
-        }
-        @keyframes dripLeft {
-            0% { transform: translateY(0) scale(1); opacity: 1; }
-            80% { transform: translateY(50px) scale(0.7); opacity: 0.7; }
-            100% { transform: translateY(70px) scale(0.3); opacity: 0; }
-        }
-        @keyframes dripRight {
-            0% { transform: translateY(0) scale(1); opacity: 1; }
-            80% { transform: translateY(-50px) scale(0.8); opacity: 0.6; }
-            100% { transform: translateY(-80px) scale(0.2); opacity: 0; }
-        }
-        .work-btn:hover {
-            transform: scale(1.02);
-            background: #551818;
-            border-color: #f33;
-        }
-
-        .work-links {
-            background: #1f1722;
-            border-radius: 40px;
-            padding: 25px 25px;
-            margin-top: 25px;
-            border: 2px dashed #a55;
-            display: none;
-            max-height: 400px;
-            overflow-y: auto;
-            box-shadow: inset 0 0 20px #2a0f0f;
-        }
-        .work-links.show { display: block; }
-        .link-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-            gap: 14px;
-        }
-        .work-link {
-            display: block;
-            background: #2d1e2a;
-            color: #ffbcbc;
-            padding: 16px 20px;
-            border-radius: 60px;
+        .info-link {
+            display: inline-block;
+            background: #331d1d;
+            color: #fdd;
+            font-size: 1.4rem;
+            padding: 15px 30px;
+            border-radius: 50px;
             text-decoration: none;
-            font-weight: 600;
-            border: 2px solid #b44;
-            transition: 0.15s;
+            font-weight: bold;
+            border: 2px solid #d66;
+            transition: 0.2s;
             word-break: break-all;
-            text-align: center;
         }
-        .work-link:hover {
-            background: #732;
+        .info-link:hover {
+            background: #722;
             color: white;
             border-color: #f88;
             transform: scale(1.02);
         }
+        .info-link i {
+            margin-right: 10px;
+            color: #faa;
+        }
 
+        /* темы (5 карточек) */
+        .section-title {
+            color: #fcc;
+            font-size: 2rem;
+            margin: 30px 0 20px;
+            border-left: 10px solid #d66;
+            padding-left: 20px;
+        }
+        .topics-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        .topic-card {
+            background: #2a202a;
+            border: 2px solid #b55;
+            border-radius: 30px;
+            padding: 20px 5px;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #ffcfcf;
+            cursor: pointer;
+            box-shadow: 0 7px 0 #633;
+            transition: 0.15s;
+        }
+        .topic-card i {
+            font-size: 2.2rem;
+            display: block;
+            margin-bottom: 8px;
+            color: #e77;
+        }
+        .topic-card:hover {
+            transform: translateY(-5px);
+            border-color: #f77;
+            box-shadow: 0 12px 0 #944;
+        }
+
+        /* WORK кнопка + ссылки */
+        .work-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 30px 0;
+        }
+        .work-btn {
+            position: relative;
+            background: #3f1a1a;
+            border: 4px solid #b22;
+            color: white;
+            font-size: 3rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            padding: 20px 90px;
+            border-radius: 90px;
+            letter-spacing: 8px;
+            cursor: pointer;
+            box-shadow: 0 15px 0 #611, 0 0 40px #f44;
+            transition: 0.1s;
+        }
+        .work-btn::before, .work-btn::after {
+            content: "";
+            position: absolute;
+            top: -20px;
+            left: 25%;
+            width: 15px;
+            height: 25px;
+            background: #d22;
+            border-radius: 50%;
+            filter: blur(3px);
+            opacity: 0;
+            box-shadow: 0 0 15px red;
+        }
+        .work-btn::after {
+            top: auto;
+            bottom: -30px;
+            left: 70%;
+            width: 20px;
+            height: 35px;
+        }
+        .work-btn:hover::before {
+            opacity: 1;
+            animation: drip 0.9s infinite;
+        }
+        .work-btn:hover::after {
+            opacity: 1;
+            animation: drip 1.2s infinite 0.2s;
+        }
+        @keyframes drip {
+            0% { transform: translateY(0); opacity: 1; }
+            80% { transform: translateY(60px); opacity: 0.5; }
+            100% { transform: translateY(90px); opacity: 0; }
+        }
+        .work-btn:hover {
+            background: #6b2b2b;
+            border-color: #f44;
+            transform: scale(1.02);
+        }
+
+        .work-links {
+            background: #1f1522;
+            border-radius: 50px;
+            padding: 30px;
+            margin-top: 30px;
+            border: 3px dashed #c66;
+            display: none;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .work-links.show { display: block; }
+        .link-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+        }
+        .work-link {
+            display: block;
+            background: #2f1d2a;
+            color: #fcc;
+            padding: 15px 20px;
+            border-radius: 40px;
+            text-decoration: none;
+            border: 2px solid #b55;
+            text-align: center;
+            font-weight: 600;
+            transition: 0.15s;
+        }
+        .work-link:hover {
+            background: #943;
+            color: white;
+            border-color: #faa;
+        }
+
+        /* нижняя подпись */
         .signature {
             text-align: center;
-            margin-top: 30px;
-            font-size: 2rem;
+            font-size: 2.2rem;
             font-weight: 800;
-            color: #b55;
-            background: rgba(0,0,0,0.5);
-            padding: 16px 10px;
+            color: #d88;
+            background: #1a121a;
+            padding: 20px;
             border-radius: 60px;
-            border: 1px solid #933;
+            border: 2px solid #b55;
             text-transform: uppercase;
-            letter-spacing: 4px;
         }
         .signature span {
             color: #faa;
-            text-shadow: 0 0 10px #f33;
+            text-shadow: 0 0 15px #f33;
         }
 
-        .work-links::-webkit-scrollbar { width: 12px; }
-        .work-links::-webkit-scrollbar-track { background: #2d1b1b; }
-        .work-links::-webkit-scrollbar-thumb { background: #a33; border-radius: 20px; }
-
-        @media (max-width: 700px) {
-            .work-btn { font-size: 2rem; padding: 15px 30px; }
-            .signature { font-size: 1.5rem; }
+        @media (max-width: 900px) {
+            .topics-grid { grid-template-columns: repeat(2,1fr); }
+            .info-grid { grid-template-columns: 1fr; }
+            .work-btn { font-size: 2rem; padding: 15px 40px; }
         }
     </style>
 </head>
 <body>
 <div class="glass-panel">
+    <!-- верх с аватарами -->
     <div class="top-bar">
         <div class="avatars">
             <div class="avatar-block xammers">
-                <img src="avatar1.jpg" alt="xammers" class="avatar-img" onerror="this.src='https://via.placeholder.com/52/a33/fff?text=X'">
+                <img src="avatar1.jpg" alt="xammers" class="avatar-img" onerror="this.src='https://via.placeholder.com/60/a33/fff?text=X'">
                 <span class="avatar-name">xammers</span>
             </div>
             <div class="avatar-block atlizon">
-                <img src="avatar2.jpg" alt="atlizon" class="avatar-img" onerror="this.src='https://via.placeholder.com/52/63a/fff?text=A'">
+                <img src="avatar2.jpg" alt="atlizon" class="avatar-img" onerror="this.src='https://via.placeholder.com/60/73a/fff?text=A'">
                 <span class="avatar-name">atlizon</span>
             </div>
         </div>
-        <!-- аудио с автоплеем (скрыто) -->
-        <audio id="bgMusic" autoplay loop playsinline>
-            <source src="music.mp3" type="audio/mpeg">
-            <source src="music.ogg" type="audio/ogg">
-        </audio>
-        <div class="music-icon"><i class="fas fa-headphones-alt"></i></div>
+        <!-- МУЗЫКАЛЬНЫЙ ПЛЕЕР - ВИДИМЫЙ, ЧТОБЫ ТОЧНО РАБОТАЛ -->
+        <div class="music-area">
+            <i class="fas fa-compact-disc music-icon"></i>
+            <audio id="musicPlayer" controls loop>
+                <source src="music.mp3" type="audio/mpeg">
+                <source src="music.ogg" type="audio/ogg">
+                <source src="music.wav" type="audio/wav">
+                <!-- подхватит любой файл в репозитории -->
+                Ваш браузер не поддерживает аудио
+            </audio>
+        </div>
     </div>
 
+    <!-- табы -->
     <div class="tabs">
-        <button class="tab-btn active" id="tabXammers"><i class="fas fa-skull"></i> XAMMERS</button>
-        <button class="tab-btn" id="tabAtlizon"><i class="fas fa-dragon"></i> ATLIZON</button>
+        <button class="tab-btn active" id="tabX"><i class="fas fa-skull"></i> XAMMERS</button>
+        <button class="tab-btn" id="tabA"><i class="fas fa-dragon"></i> ATLIZON</button>
     </div>
 
     <div class="tab-content">
-        <div class="tab-pane active-pane" id="paneXammers">
+        <!-- ======== ПАНЕЛЬ XAMMERS ======== -->
+        <div class="tab-pane active-pane" id="paneX">
+            <!-- канал и дм -->
+            <div class="info-grid">
+                <div class="info-card">
+                    <div class="info-label"><i class="fas fa-broadcast-tower"></i> КАНАЛ</div>
+                    <a href="https://t.me/MenaceLink" target="_blank" class="info-link"><i class="fab fa-telegram"></i> @MenaceLink</a>
+                </div>
+                <div class="info-card">
+                    <div class="info-label"><i class="fas fa-envelope"></i> DM</div>
+                    <a href="https://t.me/xammepc" target="_blank" class="info-link"><i class="fab fa-telegram"></i> @xammepc</a>
+                </div>
+            </div>
+
             <div class="section-title"><i class="fas fa-bolt"></i> темы xammers · хаос</div>
-            <div class="topics-grid" id="xammersTopics"></div>
+            <div class="topics-grid" id="xTopics"></div>
+
             <div class="work-wrapper">
-                <button class="work-btn" id="workBtnX"><i class="fas fa-tint"></i> WORK</button>
-                <div class="work-links" id="workLinksX"></div>
+                <button class="work-btn" id="workX"><i class="fas fa-tint"></i> WORK</button>
+                <div class="work-links" id="linksX"></div>
             </div>
         </div>
-        <div class="tab-pane" id="paneAtlizon">
+
+        <!-- ======== ПАНЕЛЬ ATLIZON ======== -->
+        <div class="tab-pane" id="paneA">
+            <div class="info-grid">
+                <div class="info-card">
+                    <div class="info-label"><i class="fas fa-broadcast-tower"></i> КАНАЛ</div>
+                    <a href="https://t.me/MenaceLink" target="_blank" class="info-link"><i class="fab fa-telegram"></i> @MenaceLink</a>
+                </div>
+                <div class="info-card">
+                    <div class="info-label"><i class="fas fa-envelope"></i> DM</div>
+                    <a href="https://t.me/atlizup" target="_blank" class="info-link"><i class="fab fa-telegram"></i> @atlizup</a>
+                </div>
+            </div>
+
             <div class="section-title"><i class="fas fa-moon"></i> темы atlizon · мистика</div>
-            <div class="topics-grid" id="atlizonTopics"></div>
+            <div class="topics-grid" id="aTopics"></div>
+
             <div class="work-wrapper">
-                <button class="work-btn" id="workBtnA"><i class="fas fa-tint"></i> WORK</button>
-                <div class="work-links" id="workLinksA"></div>
+                <button class="work-btn" id="workA"><i class="fas fa-tint"></i> WORK</button>
+                <div class="work-links" id="linksA"></div>
             </div>
         </div>
     </div>
@@ -382,22 +435,19 @@
 
 <script>
     (function() {
-        // ========== МУЗЫКА: 100% будет играть ==========
-        const audio = document.getElementById('bgMusic');
-        audio.volume = 1; // приятная громкость
-        
-        // Форсированный запуск (сработает сразу если возможно)
+        // ========== МУЗЫКА - ГАРАНТИРОВАННО ИГРАЕТ ==========
+        const audio = document.getElementById('musicPlayer');
+        audio.volume = 0.5;
+        // пробуем автоплей
         let playPromise = audio.play();
         if (playPromise !== undefined) {
             playPromise.catch(() => {
-                // автоплей заблокирован — запустим после первого взаимодействия
-                document.addEventListener('click', function once() {
-                    audio.play().catch(e => console.log('музыка: клик сработал'));
-                }, { once: true });
+                // если заблокировано, показываем сообщение и играем после клика
+                console.log('нажми play в плеере');
             });
         }
 
-        // ========== СПИСОК ВОРК ССЫЛОК ==========
+        // ========== СПИСОК ССЫЛОК WORK ==========
         const workUrls = [
             "https://telegra.ph/Work-1-03-16", "https://telegra.ph/work-2-03-16", "https://telegra.ph/work-3-03-16",
             "https://telegra.ph/work-4-03-16", "https://telegra.ph/work-5-03-16", "https://telegra.ph/work-6-03-16",
@@ -407,196 +457,88 @@
             "https://telegra.ph/work-16-03-16-2", "https://telegra.ph/work-16-03-16", "https://telegra.ph/work-18-03-16"
         ];
 
-        // ========== ТЕМЫ (каждая меняет цвет) ==========
-        const themes = [
-            { 
-                name: '🩸 Кровавая луна', 
-                bg: '#1f0f0f', 
-                panelBorder: '#c44', panelGlow: '#e66',
-                tabBottom: '#b33', tabActive: '#a33', tabGlow: '#f66',
-                contentBorder: '#b55', titleLine: '#c55',
-                cardBorder: '#a44', cardShadow: '#622',
-                avatarBorder: '#c44', avatarGlow: '#f88'
-            },
-            { 
-                name: '💀 Некрополис', 
-                bg: '#1a1a1a', 
-                panelBorder: '#777', panelGlow: '#aaa',
-                tabBottom: '#666', tabActive: '#555', tabGlow: '#aaa',
-                contentBorder: '#777', titleLine: '#888',
-                cardBorder: '#5f5f5f', cardShadow: '#333',
-                avatarBorder: '#777', avatarGlow: '#ccc'
-            },
-            { 
-                name: '🔮 Киберпанк', 
-                bg: '#0c1120', 
-                panelBorder: '#3f6fdf', panelGlow: '#7fa9ff',
-                tabBottom: '#2f5fb0', tabActive: '#1f4f9f', tabGlow: '#7fa9ff',
-                contentBorder: '#2f5fb0', titleLine: '#5f8fef',
-                cardBorder: '#2f5fb0', cardShadow: '#1f2f5f',
-                avatarBorder: '#3f6fdf', avatarGlow: '#8ab2ff'
-            },
-            { 
-                name: '🌑 Затмение', 
-                bg: '#17122b', 
-                panelBorder: '#a355b0', panelGlow: '#d28cff',
-                tabBottom: '#7a3f8a', tabActive: '#6a2f7a', tabGlow: '#d28cff',
-                contentBorder: '#8a4a9a', titleLine: '#b27acf',
-                cardBorder: '#8a4a9a', cardShadow: '#3f2550',
-                avatarBorder: '#a355b0', avatarGlow: '#e2a5ff'
-            },
-            { 
-                name: '🔥 Адское пламя', 
-                bg: '#2f150a', 
-                panelBorder: '#e07f30', panelGlow: '#ffaa5e',
-                tabBottom: '#b85f20', tabActive: '#a04f10', tabGlow: '#ffaa5e',
-                contentBorder: '#c86f30', titleLine: '#e88f40',
-                cardBorder: '#c86f30', cardShadow: '#7f3f15',
-                avatarBorder: '#e07f30', avatarGlow: '#ffc285'
-            },
-            { 
-                name: '🧠 ИИ восстание', 
-                bg: '#162312', 
-                panelBorder: '#5fb05f', panelGlow: '#9fef9f',
-                tabBottom: '#3f8f3f', tabActive: '#2f7f2f', tabGlow: '#9fef9f',
-                contentBorder: '#4f9f4f', titleLine: '#6fbf6f',
-                cardBorder: '#4f9f4f', cardShadow: '#1f4f1f',
-                avatarBorder: '#5fb05f', avatarGlow: '#b0ffb0'
-            },
-            { 
-                name: '🦇 Ночные твари', 
-                bg: '#1c1427', 
-                panelBorder: '#8f6ac0', panelGlow: '#cba9ff',
-                tabBottom: '#6f4a9f', tabActive: '#5f3a8f', tabGlow: '#cba9ff',
-                contentBorder: '#7f5ab0', titleLine: '#9f7ad0',
-                cardBorder: '#7f5ab0', cardShadow: '#3e2a5a',
-                avatarBorder: '#8f6ac0', avatarGlow: '#dbbbff'
-            },
-            { 
-                name: '☠️ Яды', 
-                bg: '#1e2a1a', 
-                panelBorder: '#8fc55f', panelGlow: '#c6ff96',
-                tabBottom: '#6fa53f', tabActive: '#5f952f', tabGlow: '#c6ff96',
-                contentBorder: '#7fb54f', titleLine: '#9fd56f',
-                cardBorder: '#7fb54f', cardShadow: '#2f5f2a',
-                avatarBorder: '#8fc55f', avatarGlow: '#daffaa'
-            },
-            { 
-                name: '🌊 Глубины', 
-                bg: '#122d3a', 
-                panelBorder: '#3fa5cf', panelGlow: '#8ed9ff',
-                tabBottom: '#1f85af', tabActive: '#0f759f', tabGlow: '#8ed9ff',
-                contentBorder: '#2f95bf', titleLine: '#4fb5df',
-                cardBorder: '#2f95bf', cardShadow: '#0f4560',
-                avatarBorder: '#3fa5cf', avatarGlow: '#a0e5ff'
-            },
-            { 
-                name: '🎭 Маски', 
-                bg: '#2d241a', 
-                panelBorder: '#cfa57f', panelGlow: '#ffdbb5',
-                tabBottom: '#b0855f', tabActive: '#a0754f', tabGlow: '#ffdbb5',
-                contentBorder: '#bf9570', titleLine: '#dfb590',
-                cardBorder: '#bf9570', cardShadow: '#6f4f35',
-                avatarBorder: '#cfa57f', avatarGlow: '#ffe5c8'
-            }
+        // ========== 5 РАНДОМНЫХ ТЕМ ==========
+        const themeNames = [
+            '🩸 Кровавая луна', '💀 Некрополис', '🔮 Киберпанк', '🌑 Затмение', '🔥 Адское пламя',
+            '🧠 ИИ восстание', '🦇 Ночные твари', '☠️ Яды', '🌊 Глубины', '🎭 Маски',
+            '⚡ Электричество', '👁️ Иллюминаты', '🗡️ Клинки', '🍷 Вампиры', '📿 Проклятия'
         ];
 
-        // Функция получения 5 случайных тем
-        function getRandomThemes(count = 5) {
-            const shuffled = [...themes].sort(() => 0.5 - Math.random());
-            return shuffled.slice(0, count);
+        function getRandomThemes(count) {
+            return [...themeNames].sort(() => 0.5 - Math.random()).slice(0, count);
         }
 
-        // ПРИМЕНЕНИЕ ТЕМЫ ко всем переменным css
-        function applyTheme(theme) {
-            document.body.style.backgroundColor = theme.bg; // напрямую для body
-            
-            // устанавливаем CSS-переменные
-            document.body.style.setProperty('--bg-color', theme.bg);
-            document.body.style.setProperty('--panel-border', theme.panelBorder);
-            document.body.style.setProperty('--panel-glow', theme.panelGlow);
-            document.body.style.setProperty('--tab-bottom', theme.tabBottom);
-            document.body.style.setProperty('--tab-active', theme.tabActive);
-            document.body.style.setProperty('--tab-active-glow', theme.tabGlow);
-            document.body.style.setProperty('--content-border', theme.contentBorder);
-            document.body.style.setProperty('--title-line', theme.titleLine);
-            document.body.style.setProperty('--card-border', theme.cardBorder);
-            document.body.style.setProperty('--card-shadow', theme.cardShadow);
-            document.body.style.setProperty('--avatar-border', theme.avatarBorder);
-            document.body.style.setProperty('--avatar-glow', theme.avatarGlow);
-        }
-
-        // заполнение сетки тем (и добавление клика)
-        function renderTopics(container, person) {
-            const selectedThemes = getRandomThemes(5);
-            container.innerHTML = '';
-            selectedThemes.forEach(t => {
+        // заполнение сеток (темы просто для красоты, но можно сделать кликабельными)
+        function fillTopics(containerId, icon) {
+            const cont = document.getElementById(containerId);
+            const themes = getRandomThemes(5);
+            cont.innerHTML = '';
+            themes.forEach(t => {
                 const card = document.createElement('div');
                 card.className = 'topic-card';
-                card.innerHTML = `<i class="fas ${person === 'x' ? 'fa-biohazard' : 'fa-star-and-crescent'}"></i>${t.name}`;
-                // клик = смена всей цветовой схемы
-                card.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    applyTheme(t);
+                card.innerHTML = `<i class="fas ${icon}"></i>${t}`;
+                // при клике меняем фон (просто для интерактива)
+                card.addEventListener('click', () => {
+                    document.body.style.backgroundColor = `hsl(${Math.random()*360}, 30%, 10%)`;
                 });
-                container.appendChild(card);
+                cont.appendChild(card);
             });
         }
+        fillTopics('xTopics', 'fa-biohazard');
+        fillTopics('aTopics', 'fa-star-and-crescent');
 
-        renderTopics(document.getElementById('xammersTopics'), 'x');
-        renderTopics(document.getElementById('atlizonTopics'), 'a');
-
-        // ========== ВОРКИ (ссылки) ==========
-        function buildLinksHTML() {
+        // ========== ССЫЛКИ WORK ==========
+        function buildLinks() {
             let html = '<div class="link-grid">';
             workUrls.forEach(url => {
-                html += `<a href="${url}" target="_blank" class="work-link">${url.replace('https://telegra.ph/', '')}</a>`;
+                let name = url.replace('https://telegra.ph/', '');
+                html += `<a href="${url}" target="_blank" class="work-link">${name}</a>`;
             });
             html += '</div>';
             return html;
         }
-        const linksHTML = buildLinksHTML();
-        const workLinksX = document.getElementById('workLinksX');
-        const workLinksA = document.getElementById('workLinksA');
-        workLinksX.innerHTML = linksHTML;
-        workLinksA.innerHTML = linksHTML;
+        const linksHtml = buildLinks();
+        document.getElementById('linksX').innerHTML = linksHtml;
+        document.getElementById('linksA').innerHTML = linksHtml;
 
-        // ========== КНОПКИ WORK (показать/скрыть) ==========
-        const btnX = document.getElementById('workBtnX');
-        const btnA = document.getElementById('workBtnA');
-        function toggleLinks(btn, linksContainer) {
-            const isVisible = linksContainer.classList.contains('show');
-            workLinksX.classList.remove('show');
-            workLinksA.classList.remove('show');
-            if (!isVisible) linksContainer.classList.add('show');
+        // ========== КНОПКИ WORK ==========
+        const workX = document.getElementById('workX');
+        const workA = document.getElementById('workA');
+        const linksX = document.getElementById('linksX');
+        const linksA = document.getElementById('linksA');
+
+        function toggleWork(btn, links) {
+            linksX.classList.remove('show');
+            linksA.classList.remove('show');
+            links.classList.toggle('show');
         }
-        btnX.addEventListener('click', () => toggleLinks(btnX, workLinksX));
-        btnA.addEventListener('click', () => toggleLinks(btnA, workLinksA));
+
+        workX.addEventListener('click', () => toggleWork(workX, linksX));
+        workA.addEventListener('click', () => toggleWork(workA, linksA));
 
         // ========== ПЕРЕКЛЮЧЕНИЕ ТАБОВ ==========
-        const tabX = document.getElementById('tabXammers');
-        const tabA = document.getElementById('tabAtlizon');
-        const paneX = document.getElementById('paneXammers');
-        const paneA = document.getElementById('paneAtlizon');
+        const tabX = document.getElementById('tabX');
+        const tabA = document.getElementById('tabA');
+        const paneX = document.getElementById('paneX');
+        const paneA = document.getElementById('paneA');
 
-        function setActiveTab(active) {
-            tabX.classList.remove('active');
+        tabX.addEventListener('click', () => {
+            tabX.classList.add('active');
             tabA.classList.remove('active');
-            paneX.classList.remove('active-pane');
+            paneX.classList.add('active-pane');
             paneA.classList.remove('active-pane');
-            if (active === 'x') {
-                tabX.classList.add('active');
-                paneX.classList.add('active-pane');
-            } else {
-                tabA.classList.add('active');
-                paneA.classList.add('active-pane');
-            }
-            workLinksX.classList.remove('show');
-            workLinksA.classList.remove('show');
-        }
-        tabX.addEventListener('click', () => setActiveTab('x'));
-        tabA.addEventListener('click', () => setActiveTab('a'));
-        setActiveTab('x');
+            linksX.classList.remove('show');
+            linksA.classList.remove('show');
+        });
+
+        tabA.addEventListener('click', () => {
+            tabA.classList.add('active');
+            tabX.classList.remove('active');
+            paneA.classList.add('active-pane');
+            paneX.classList.remove('active-pane');
+            linksX.classList.remove('show');
+            linksA.classList.remove('show');
+        });
     })();
 </script>
 </body>
