@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>xammers · atlizon · темы</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            transition: background-color 0.4s ease, color 0.3s ease;
+        }
+
+        /* темы (5 штук) — применяются к body, влияют на фон и общий цвет текста */
+        body.theme-dark {
+            background-color: #0c0c0c;
+            color: #f0f0f0;
+        }
+        body.theme-dark .container {
+            background: rgba(10, 10, 10, 0.85);
+            border-color: #ff5e5e;
+            box-shadow: 0 0 30px rgba(255, 80, 80, 0.3);
+        }
+
+        body.theme-light {
+            background-color: #ece4db;
+            color: #1e1e1e;
+        }
+        body.theme-light .container {
+            background: rgba(250, 245, 235, 0.8);
+            border-color: #b13e3e;
+            color: #1e1e1e;
+        }
+        body.theme-light .container a,
+        body.theme-light .container .tab-item,
+        body.theme-light .container .button-link {
+            color: #1e1e1e;
+        }
+        body.theme-light .container .separator {
+            border-top-color: #1e1e1e;
+        }
+
+        body.theme-neon {
+            background-color: #001f3f;
+            color: #c0ffc0;
+        }
+        body.theme-neon .container {
+            background: rgba(0, 30, 30, 0.85);
+            border-color: #5effae;
+            box-shadow: 0 0 25px #1aff8c;
+        }
+
+        body.theme-blood {
+            background-color: #1a0000;
+            color: #ffcaca;
+        }
+        body.theme-blood .container {
+            background: rgba(40, 5, 5, 0.9);
+            border-color: #ff5f5f;
+            box-shadow: 0 0 30px #b30000;
+        }
+
+        body.theme-ocean {
+            background-color: #011c2c;
+            color: #b3eaff;
+        }
+        body.theme-ocean .container {
+            background: rgba(2, 35, 50, 0.85);
+            border-color: #40c8ff;
+            box-shadow: 0 0 30px #0077be;
+        }
+
+        /* контейнер с закруглёнными углами и блюром */
+        .container {
+            max-width: 780px;
+            width: 100%;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 2px solid;
+            border-radius: 42px;
+            padding: 40px 35px;
+            transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s;
+        }
+
+        /* все остальные углы тоже закругляем */
+        .tabs-row,
+        .work-display,
+        .avatar,
+        .avatar-names,
+        .duo-names,
+        .buttons-row,
+        .bottom-dm,
+        .footer-note,
+        .tab-item,
+        .button-link,
+        .work-link,
+        .main-title {
+            border-radius: 24px;
+        }
+
+        .avatar {
+            border-radius: 50%; /* оставляем круглую аватарку */
+        }
+
+        /* переключатель тем (пять точек) */
+        .theme-switcher {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .theme-dot {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+            box-shadow: 0 0 10px currentColor;
+        }
+
+        .theme-dot:hover {
+            transform: scale(1.2);
+            border-color: white;
+            box-shadow: 0 0 20px currentColor;
+        }
+
+        .theme-dot[data-theme="dark"] { background: #1a1a1a; box-shadow: 0 0 12px #aaa; }
+        .theme-dot[data-theme="light"] { background: #f0e7d6; box-shadow: 0 0 12px #bba87f; }
+        .theme-dot[data-theme="neon"] { background: #00cc66; box-shadow: 0 0 15px #00ff88; }
+        .theme-dot[data-theme="blood"] { background: #8b0000; box-shadow: 0 0 15px #ff4d4d; }
+        .theme-dot[data-theme="ocean"] { background: #0077be; box-shadow: 0 0 15px #3fa0e0; }
+
+        /* кровоточащий эффект (управляется js) */
+        .blood-hover {
+            position: relative;
+            display: inline-block;
+            transition: color 0.25s ease, text-shadow 0.2s;
+            z-index: 2;
+            cursor: default;
+        }
+
+        a.blood-hover, .tab-item.blood-hover, .button-link.blood-hover {
+            cursor: pointer;
+        }
+
+        .blood-hover::before {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            width: calc(100% + 10px);
+            height: calc(100% + 10px);
+            background: radial-gradient(circle at var(--x, 20%) var(--y, 20%), rgba(220, 20, 20, 0.9) 0%, transparent 70%);
+            opacity: 0;
+            pointer-events: none;
+            z-index: -1;
+            mix-blend-mode: screen;
+            filter: blur(6px);
+            transition: opacity 0.25s;
+            border-radius: 30%;
+        }
+
+        .blood-hover:hover {
+            color: #ffffff !important;
+            text-shadow: 0 0 8px #ff4d4d, 0 0 15px red;
+        }
+
+        .blood-hover:hover::before {
+            opacity: 0.9;
+            animation: drip 1.2s infinite alternate ease-in-out;
+        }
+
+        @keyframes drip {
+            0% { transform: translateY(0) scale(1); filter: blur(6px); opacity: 0.8; }
+            100% { transform: translateY(14px) scale(1.3); filter: blur(12px); opacity: 0.3; }
+        }
+
+        /* заголовок */
+        .main-title {
+            font-size: 2.8rem;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 30px;
+            text-transform: lowercase;
+            letter-spacing: -0.5px;
+            border-bottom: 2px solid currentColor;
+            padding-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            flex-wrap: wrap;
+            border-radius: 0; /* убираем лишний радиус */
+        }
+
+        .tabs-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px 20px;
+            font-size: 2.2rem;
+            font-weight: 600;
+            margin-bottom: 40px;
+            border-bottom: 2px solid currentColor;
+            padding: 10px 10px 20px 10px;
+            text-transform: lowercase;
+        }
+
+        .tab-item {
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.2s;
+            position: relative;
+            white-space: nowrap;
+            padding: 0 6px;
+        }
+
+        .tab-item.active {
+            font-weight: 900;
+            text-decoration: underline;
+            text-underline-offset: 8px;
+            text-decoration-thickness: 3px;
+        }
+
+        .work-display {
+            margin: 30px 0 40px 20px;
+            padding: 5px 15px;
+        }
+
+        .work-label {
+            font-size: 2.3rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            text-transform: lowercase;
+        }
+
+        .work-link {
+            font-size: 1.8rem;
+            text-decoration: underline dashed 1.5px #888;
+            display: inline-block;
+            word-break: break-all;
+            margin-bottom: 30px;
+            text-underline-offset: 8px;
+            padding: 5px 10px;
+        }
+
+        .separator {
+            border-top: 2px solid currentColor;
+            margin: 30px 0 30px 0;
+            opacity: 0.8;
+            border-radius: 0;
+        }
+
+        .avatar-pair {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            margin: 15px 0 10px 0;
+        }
+
+        .avatar {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            border: 3px solid currentColor;
+            background: rgba(128,128,128,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.8rem;
+            overflow: hidden;
+            backdrop-filter: blur(2px);
+        }
+
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .avatar-names {
+            display: flex;
+            justify-content: center;
+            gap: 90px;
+            margin: 8px 0 25px 0;
+            font-weight: 700;
+            font-size: 1.5rem;
+            text-transform: uppercase;
+        }
+
+        .duo-names {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 8px;
+            margin: 20px 0 25px 0;
+            font-size: 2.6rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            line-height: 1.2;
+            padding: 10px 20px;
+        }
+
+        .duo-names .right {
+            margin-left: 60px;
+        }
+
+        .buttons-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 40px;
+            font-size: 2rem;
+            font-weight: 600;
+            margin: 30px 0 25px 0;
+            text-transform: lowercase;
+            align-items: center;
+            padding: 10px 15px;
+        }
+
+        .button-link {
+            text-decoration: none;
+            border-bottom: 2px solid transparent;
+            transition: 0.2s;
+            cursor: pointer;
+            background-color: transparent;
+            padding: 5px 10px;
+        }
+
+        .button-link:hover {
+            border-bottom-color: currentColor;
+        }
+
+        .bottom-dm {
+            font-size: 2rem;
+            font-weight: 600;
+            margin: 15px 0 25px 0;
+            text-transform: lowercase;
+            display: flex;
+            justify-content: flex-start;
+            padding: 5px 20px;
+        }
+
+        .footer-note {
+            font-size: 1.5rem;
+            margin-top: 30px;
+            border-top: 2px solid currentColor;
+            padding: 20px 20px 0 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .paper-plane {
+            font-size: 2rem;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        @media (max-width: 550px) {
+            .main-title { font-size: 2rem; }
+            .tabs-row { font-size: 1.6rem; gap: 10px; }
+            .work-label { font-size: 1.7rem; }
+            .work-link { font-size: 1.3rem; }
+            .duo-names { font-size: 2rem; }
+            .buttons-row { font-size: 1.5rem; gap: 20px; }
+            .bottom-dm { font-size: 1.5rem; }
+            .avatar-pair { gap: 30px; }
+            .avatar-names { gap: 40px; }
+        }
+    </style>
+</head>
+<body class="theme-dark"> <!-- стартовая тема -->
+    <div class="container">
+
+        <!-- переключатель 5 тем (кружки) -->
+        <div class="theme-switcher">
+            <div class="theme-dot" data-theme="dark" title="тёмная"></div>
+            <div class="theme-dot" data-theme="light" title="светлая"></div>
+            <div class="theme-dot" data-theme="neon" title="неон"></div>
+            <div class="theme-dot" data-theme="blood" title="кровавая"></div>
+            <div class="theme-dot" data-theme="ocean" title="океан"></div>
+        </div>
+
+        <!-- шапка: xammers and atlizon -->
+        <div class="main-title">
+            <span>xammers and atlizon</span>
+            <span>✦</span>
+        </div>
+
+        <!-- Work 1 | Work 2 | Work 3 | Work 4 | Work 5 -->
+        <div class="tabs-row" id="tabsContainer">
+            <span class="tab-item blood-hover active" data-work="1">Work 1</span> |
+            <span class="tab-item blood-hover" data-work="2">Work 2</span> |
+            <span class="tab-item blood-hover" data-work="3">Work 3</span> |
+            <span class="tab-item blood-hover" data-work="4">Work 4</span> |
+            <span class="tab-item blood-hover" data-work="5">Work 5</span>
+        </div>
+
+        <!-- динамическая работа + ссылка -->
+        <div class="work-display" id="workDisplay">
+            <div class="work-label" id="workLabel">работа 1</div>
+            <a href="https://telegra.ph/Work-1-03-16" target="_blank" class="work-link blood-hover" id="workLink">telegra.ph/Work-1-03-16</a>
+        </div>
+
+        <div class="separator"></div>
+
+        <!-- аватарки (avatar1.jpg, avatar2.jpg) -->
+        <div class="avatar-pair">
+            <div class="avatar">
+                <img src="avatar1.jpg" alt="xammers" onerror="this.onerror=null; this.parentElement.innerHTML='X';">
+            </div>
+            <div class="avatar">
+                <img src="avatar2.jpg" alt="atlizon" onerror="this.onerror=null; this.parentElement.innerHTML='A';">
+            </div>
+        </div>
+        <div class="avatar-names">
+            <span>XAMMERS</span>
+            <span>ATLIZON</span>
+        </div>
+
+        <!-- крупные имена XAMMERS и ATLIZON -->
+        <div class="duo-names">
+            <span class="left blood-hover">XAMMERS</span>
+            <span class="right blood-hover">ATLIZON</span>
+        </div>
+
+        <div class="separator"></div>
+
+        <!-- первая строка кнопок -->
+        <div class="buttons-row">
+            <a href="https://t.me/MenaceLink" target="_blank" class="button-link blood-hover">КАНАЛ</a>
+            <a href="https://t.me/melanholbio" target="_blank" class="button-link blood-hover">ПЕРЕХОДНИК</a>
+            <a href="https://t.me/xammepc" target="_blank" class="button-link blood-hover">DM @xammers</a>
+        </div>
+
+        <!-- DM @atlizon отдельно -->
+        <div class="bottom-dm">
+            <a href="https://t.me/atlizup" target="_blank" class="button-link blood-hover">DM @atlizon</a>
+        </div>
+
+        <div class="separator"></div>
+
+        <!-- подвал -->
+        <div class="footer-note">
+            <span class="paper-plane">✈️</span> XAMMERS / ATLIZON
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            // эффект крови
+            const bloodElements = document.querySelectorAll('.blood-hover');
+            document.addEventListener('mousemove', function(e) {
+                bloodElements.forEach(el => {
+                    const rect = el.getBoundingClientRect();
+                    const x = ((e.clientX - rect.left) / rect.width) * 100;
+                    const y = ((e.clientY - rect.top) / rect.height) * 100;
+                    if (x >= 0 && x <= 100 && y >= 0 && y <= 100) {
+                        el.style.setProperty('--x', x + '%');
+                        el.style.setProperty('--y', y + '%');
+                    }
+                });
+            });
+
+            // переключение работ (табы)
+            const tabs = document.querySelectorAll('.tab-item');
+            const workLabel = document.getElementById('workLabel');
+            const workLink = document.getElementById('workLink');
+
+            const workData = {
+                1: { label: 'работа 1', link: 'https://telegra.ph/Work-1-03-16' },
+                2: { label: 'работа 2', link: 'https://telegra.ph/work-2-03-16' },
+                3: { label: 'работа 3', link: 'https://telegra.ph/work-3-03-16' },
+                4: { label: 'работа 4', link: 'https://telegra.ph/work-4-03-16' },
+                5: { label: 'работа 5', link: 'https://telegra.ph/work-5-03-16' }
+            };
+
+            function setActiveTab(workId) {
+                tabs.forEach(tab => {
+                    tab.classList.remove('active');
+                    if (tab.dataset.work == workId) {
+                        tab.classList.add('active');
+                    }
+                });
+                if (workData[workId]) {
+                    workLabel.textContent = workData[workId].label;
+                    workLink.href = workData[workId].link;
+                    workLink.textContent = workData[workId].link.replace('https://', '');
+                }
+            }
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function(e) {
+                    const workId = this.dataset.work;
+                    if (workId) setActiveTab(workId);
+                });
+            });
+            setActiveTab('1');
+
+            // переключение тем
+            const themeDots = document.querySelectorAll('.theme-dot');
+            const body = document.body;
+
+            themeDots.forEach(dot => {
+                dot.addEventListener('click', function() {
+                    const theme = this.dataset.theme; // dark, light, neon, blood, ocean
+                    body.className = ''; // сброс
+                    body.classList.add(`theme-${theme}`);
+                });
+            });
+        })();
+    </script>
+</body>
+</html>
