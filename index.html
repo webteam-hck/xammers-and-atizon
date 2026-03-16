@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>xammers · atlizon · audio</title>
+    <title>xammers · atlizon · autoplay</title>
     <style>
         * {
             margin: 0;
@@ -90,7 +90,7 @@
             transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s;
         }
 
-        /* все углы закруглены, мелкие детали */
+        /* все углы закруглены */
         .tabs-row,
         .work-display,
         .avatar,
@@ -103,16 +103,15 @@
         .button-link,
         .work-link,
         .main-title,
-        .audio-player,
         .theme-switcher {
             border-radius: 24px;
         }
 
         .avatar {
-            border-radius: 50%; /* аватарки круглые */
+            border-radius: 50%;
         }
 
-        /* переключатель тем (пять точек) — компактный */
+        /* переключатель тем */
         .theme-switcher {
             display: flex;
             justify-content: flex-end;
@@ -142,23 +141,9 @@
         .theme-dot[data-theme="blood"] { background: #8b0000; }
         .theme-dot[data-theme="ocean"] { background: #0077be; }
 
-        /* аудиоплеер стильный минимализм */
-        .audio-player {
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid currentColor;
-            padding: 12px 20px;
-            margin-bottom: 25px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            backdrop-filter: blur(4px);
-        }
-
-        .audio-player audio {
-            width: 100%;
-            height: 40px;
-            border-radius: 30px;
-            background: transparent;
+        /* аудиоплеер скрыт, но музыка играет в фоне */
+        .hidden-audio {
+            display: none;
         }
 
         /* заголовок */
@@ -399,6 +384,12 @@
     </style>
 </head>
 <body class="theme-dark">
+    <!-- СКРЫТЫЙ АУДИОПЛЕЕР с автовоспроизведением и бесконечным циклом -->
+    <audio id="bgMusic" class="hidden-audio" autoplay loop>
+        <source src="music.mp3" type="audio/mpeg">
+        Ваш браузер не поддерживает аудио.
+    </audio>
+
     <div class="container">
 
         <!-- переключатель 5 тем -->
@@ -408,14 +399,6 @@
             <div class="theme-dot" data-theme="neon" title="неон"></div>
             <div class="theme-dot" data-theme="blood" title="кровавая"></div>
             <div class="theme-dot" data-theme="ocean" title="океан"></div>
-        </div>
-
-        <!-- АУДИОПЛЕЕР: если music.mp3 есть в папке, будет играть -->
-        <div class="audio-player">
-            <audio controls loop>
-                <source src="music.mp3" type="audio/mpeg">
-                Ваш браузер не поддерживает аудио.
-            </audio>
         </div>
 
         <!-- шапка -->
@@ -540,7 +523,21 @@
                     body.classList.add(`theme-${this.dataset.theme}`);
                 });
             });
+
+            // Дополнительная попытка запустить аудио, если autoplay заблокирован браузером
+            const audio = document.getElementById('bgMusic');
+            if (audio) {
+                // Пытаемся воспроизвести при загрузке страницы
+                audio.play().catch(e => {
+                    console.log('Autoplay заблокирован браузером, ожидаем взаимодействия');
+                    // Если автовоспроизведение заблокировано, запустим музыку после первого клика где угодно
+                    document.addEventListener('click', function once() {
+                        audio.play();
+                        document.removeEventListener('click', once);
+                    });
+                });
+            }
         })();
     </script>
 </body>
-                    </html>
+</html>
