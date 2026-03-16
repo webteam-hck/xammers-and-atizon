@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>xammers & atlizon · темы и ворки</title>
+    <title>xammers & atlizon · ЖИВЫЕ ТЕМЫ + МУЗЫКА</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         * {
@@ -13,32 +13,30 @@
             font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
         }
 
-        /* Динамические переменные темы (будут меняться через js) */
+        /* CSS-переменные (будут меняться темами) */
         body {
-            background: var(--bg-main, #0b0c0e);
+            background: var(--bg-color, #0b0c0e);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 16px;
-            transition: background 0.5s ease, --bg-main 0.3s;
+            transition: background-color 0.4s ease;
         }
 
-        /* главная карточка */
         .glass-panel {
             max-width: 1100px;
             width: 100%;
             background: rgba(20, 22, 27, 0.85);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-            border: 1px solid var(--panel-border, rgba(255, 70, 70, 0.25));
+            border: 2px solid var(--panel-border, #a55);
             border-radius: 48px 48px 36px 36px;
-            box-shadow: 0 25px 50px -8px rgba(0, 0, 0, 0.8), 0 0 0 1px var(--panel-inset, rgba(180, 40, 40, 0.3)) inset;
+            box-shadow: 0 25px 50px -8px rgba(0, 0, 0, 0.8), 0 0 0 1px var(--panel-glow, #c44) inset;
             padding: 28px 28px 35px;
             transition: border-color 0.3s, box-shadow 0.3s;
         }
 
-        /* шапка с аватарками */
         .top-bar {
             display: flex;
             justify-content: space-between;
@@ -61,7 +59,7 @@
             background: rgba(0, 0, 0, 0.4);
             padding: 8px 20px 8px 12px;
             border-radius: 60px;
-            border: 1px solid #9f2b2b;
+            border: 1px solid var(--avatar-border, #9f2b2b);
             box-shadow: 0 4px 10px rgba(0,0,0,0.6);
         }
 
@@ -70,7 +68,7 @@
             height: 52px;
             border-radius: 50%;
             object-fit: cover;
-            border: 3px solid #c44;
+            border: 3px solid var(--avatar-border, #c44);
             background: #2a1e1e;
         }
 
@@ -78,18 +76,17 @@
             font-weight: 700;
             font-size: 1.3rem;
             letter-spacing: 1px;
-            text-shadow: 0 0 6px #f44;
+            text-shadow: 0 0 6px var(--avatar-glow, #f44);
         }
 
         .xammers .avatar-name { color: #ff7b7b; }
         .atlizon .avatar-name { color: #b5a0ff; }
 
-        /* скрытый аудиоплеер (авто, без элементов) */
+        /* скрытый аудио */
         #bgMusic {
             display: none;
         }
 
-        /* музыкальная иконка (просто декор) */
         .music-icon {
             color: #b44;
             font-size: 2rem;
@@ -102,11 +99,10 @@
             100% { text-shadow: 0 0 2px #f99; }
         }
 
-        /* табы */
         .tabs {
             display: flex;
             gap: 20px;
-            border-bottom: 3px solid var(--tab-border, #882222);
+            border-bottom: 3px solid var(--tab-bottom, #882222);
             padding-bottom: 12px;
             margin-bottom: 28px;
             flex-wrap: wrap;
@@ -129,7 +125,7 @@
 
         .tab-btn.active {
             color: white;
-            background: var(--tab-active-bg, #902020);
+            background: var(--tab-active, #902020);
             box-shadow: 0 -2px 15px var(--tab-active-glow, #f33);
         }
 
@@ -138,37 +134,30 @@
             background: rgba(150, 40, 40, 0.4);
         }
 
-        /* контент табов */
         .tab-content {
             background: rgba(12, 10, 16, 0.7);
             border-radius: 36px;
             padding: 28px 24px;
-            border: 1px solid var(--content-border, #a33);
+            border: 2px solid var(--content-border, #a33);
             margin-bottom: 30px;
             box-shadow: inset 0 0 20px rgba(0,0,0,0.7);
             transition: border 0.3s;
         }
 
-        .tab-pane {
-            display: none;
-        }
-        .tab-pane.active-pane {
-            display: block;
-        }
+        .tab-pane { display: none; }
+        .tab-pane.active-pane { display: block; }
 
-        /* заголовок темы */
         .section-title {
             color: #ffb7b7;
             font-size: 2rem;
             font-weight: 600;
             margin-bottom: 28px;
-            border-left: 10px solid var(--title-border, #c44);
+            border-left: 10px solid var(--title-line, #c44);
             padding-left: 20px;
             text-transform: uppercase;
             transition: border-color 0.3s;
         }
 
-        /* сетка тем (5 штук) — кликабельные карточки */
         .topics-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -204,7 +193,6 @@
             box-shadow: 0 11px 0 #6f2b2b;
         }
 
-        /* кнопка WORK (с капающей кровью) */
         .work-wrapper {
             display: flex;
             flex-direction: column;
@@ -279,7 +267,6 @@
             border-color: #f33;
         }
 
-        /* контейнер со списком ссылок (ворки) */
         .work-links {
             background: #1f1722;
             border-radius: 40px;
@@ -291,9 +278,7 @@
             overflow-y: auto;
             box-shadow: inset 0 0 20px #2a0f0f;
         }
-        .work-links.show {
-            display: block;
-        }
+        .work-links.show { display: block; }
         .link-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
@@ -319,7 +304,6 @@
             transform: scale(1.02);
         }
 
-        /* нижняя подпись */
         .signature {
             text-align: center;
             margin-top: 30px;
@@ -338,7 +322,6 @@
             text-shadow: 0 0 10px #f33;
         }
 
-        /* скролл */
         .work-links::-webkit-scrollbar { width: 12px; }
         .work-links::-webkit-scrollbar-track { background: #2d1b1b; }
         .work-links::-webkit-scrollbar-thumb { background: #a33; border-radius: 20px; }
@@ -349,7 +332,7 @@
         }
     </style>
 </head>
-<body style="--bg-main: #0b0c0e; --panel-border: rgba(255,70,70,0.25); --panel-inset: rgba(180,40,40,0.3); --tab-border: #882222; --tab-active-bg: #902020; --tab-active-glow: #f33; --content-border: #a33; --title-border: #c44; --card-border: #6f3030; --card-shadow: #3f1c1c;">
+<body>
 <div class="glass-panel">
     <div class="top-bar">
         <div class="avatars">
@@ -362,7 +345,7 @@
                 <span class="avatar-name">atlizon</span>
             </div>
         </div>
-        <!-- скрытое аудио (автоплей, loop) -->
+        <!-- аудио с автоплеем (скрыто) -->
         <audio id="bgMusic" autoplay loop playsinline>
             <source src="music.mp3" type="audio/mpeg">
             <source src="music.ogg" type="audio/ogg">
@@ -376,7 +359,6 @@
     </div>
 
     <div class="tab-content">
-        <!-- панель XAMMERS -->
         <div class="tab-pane active-pane" id="paneXammers">
             <div class="section-title"><i class="fas fa-bolt"></i> темы xammers · хаос</div>
             <div class="topics-grid" id="xammersTopics"></div>
@@ -385,7 +367,6 @@
                 <div class="work-links" id="workLinksX"></div>
             </div>
         </div>
-        <!-- панель ATLIZON -->
         <div class="tab-pane" id="paneAtlizon">
             <div class="section-title"><i class="fas fa-moon"></i> темы atlizon · мистика</div>
             <div class="topics-grid" id="atlizonTopics"></div>
@@ -401,7 +382,22 @@
 
 <script>
     (function() {
-        // ----- СПИСОК ССЫЛОК (ворки) -----
+        // ========== МУЗЫКА: 100% будет играть ==========
+        const audio = document.getElementById('bgMusic');
+        audio.volume = 1; // приятная громкость
+        
+        // Форсированный запуск (сработает сразу если возможно)
+        let playPromise = audio.play();
+        if (playPromise !== undefined) {
+            playPromise.catch(() => {
+                // автоплей заблокирован — запустим после первого взаимодействия
+                document.addEventListener('click', function once() {
+                    audio.play().catch(e => console.log('музыка: клик сработал'));
+                }, { once: true });
+            });
+        }
+
+        // ========== СПИСОК ВОРК ССЫЛОК ==========
         const workUrls = [
             "https://telegra.ph/Work-1-03-16", "https://telegra.ph/work-2-03-16", "https://telegra.ph/work-3-03-16",
             "https://telegra.ph/work-4-03-16", "https://telegra.ph/work-5-03-16", "https://telegra.ph/work-6-03-16",
@@ -411,18 +407,98 @@
             "https://telegra.ph/work-16-03-16-2", "https://telegra.ph/work-16-03-16", "https://telegra.ph/work-18-03-16"
         ];
 
-        // ----- ПУЛ ТЕМ (каждая тема меняет цветовую гамму) -----
+        // ========== ТЕМЫ (каждая меняет цвет) ==========
         const themes = [
-            { name: '🩸 Кровавая луна', bg: '#1a0a0a', border: '#c44', title: '#d66', card: '#8b3a3a' },
-            { name: '💀 Некрополис', bg: '#181818', border: '#6a6a6a', title: '#aaa', card: '#3f3f3f' },
-            { name: '🔮 Киберпанк', bg: '#0d0f1a', border: '#4d6eff', title: '#8aa1ff', card: '#1f2b4a' },
-            { name: '🌑 Затмение', bg: '#11151f', border: '#4b2e4b', title: '#c18ec1', card: '#2e1b2e' },
-            { name: '🔥 Адское пламя', bg: '#2b0c0c', border: '#f77', title: '#fcb3b3', card: '#a14224' },
-            { name: '🧠 ИИ восстание', bg: '#142010', border: '#2bbd7e', title: '#8cf0c2', card: '#144d32' },
-            { name: '🦇 Ночные твари', bg: '#11101c', border: '#7d40b3', title: '#c49aff', card: '#2e1d47' },
-            { name: '☠️ Яды', bg: '#1d2b1a', border: '#75b543', title: '#c6f78b', card: '#34662b' },
-            { name: '🌊 Глубины', bg: '#12222e', border: '#208fbf', title: '#90defa', card: '#13445a' },
-            { name: '🎭 Маски', bg: '#2a1f1a', border: '#b98a5f', title: '#ecc8a8', card: '#664d36' }
+            { 
+                name: '🩸 Кровавая луна', 
+                bg: '#1f0f0f', 
+                panelBorder: '#c44', panelGlow: '#e66',
+                tabBottom: '#b33', tabActive: '#a33', tabGlow: '#f66',
+                contentBorder: '#b55', titleLine: '#c55',
+                cardBorder: '#a44', cardShadow: '#622',
+                avatarBorder: '#c44', avatarGlow: '#f88'
+            },
+            { 
+                name: '💀 Некрополис', 
+                bg: '#1a1a1a', 
+                panelBorder: '#777', panelGlow: '#aaa',
+                tabBottom: '#666', tabActive: '#555', tabGlow: '#aaa',
+                contentBorder: '#777', titleLine: '#888',
+                cardBorder: '#5f5f5f', cardShadow: '#333',
+                avatarBorder: '#777', avatarGlow: '#ccc'
+            },
+            { 
+                name: '🔮 Киберпанк', 
+                bg: '#0c1120', 
+                panelBorder: '#3f6fdf', panelGlow: '#7fa9ff',
+                tabBottom: '#2f5fb0', tabActive: '#1f4f9f', tabGlow: '#7fa9ff',
+                contentBorder: '#2f5fb0', titleLine: '#5f8fef',
+                cardBorder: '#2f5fb0', cardShadow: '#1f2f5f',
+                avatarBorder: '#3f6fdf', avatarGlow: '#8ab2ff'
+            },
+            { 
+                name: '🌑 Затмение', 
+                bg: '#17122b', 
+                panelBorder: '#a355b0', panelGlow: '#d28cff',
+                tabBottom: '#7a3f8a', tabActive: '#6a2f7a', tabGlow: '#d28cff',
+                contentBorder: '#8a4a9a', titleLine: '#b27acf',
+                cardBorder: '#8a4a9a', cardShadow: '#3f2550',
+                avatarBorder: '#a355b0', avatarGlow: '#e2a5ff'
+            },
+            { 
+                name: '🔥 Адское пламя', 
+                bg: '#2f150a', 
+                panelBorder: '#e07f30', panelGlow: '#ffaa5e',
+                tabBottom: '#b85f20', tabActive: '#a04f10', tabGlow: '#ffaa5e',
+                contentBorder: '#c86f30', titleLine: '#e88f40',
+                cardBorder: '#c86f30', cardShadow: '#7f3f15',
+                avatarBorder: '#e07f30', avatarGlow: '#ffc285'
+            },
+            { 
+                name: '🧠 ИИ восстание', 
+                bg: '#162312', 
+                panelBorder: '#5fb05f', panelGlow: '#9fef9f',
+                tabBottom: '#3f8f3f', tabActive: '#2f7f2f', tabGlow: '#9fef9f',
+                contentBorder: '#4f9f4f', titleLine: '#6fbf6f',
+                cardBorder: '#4f9f4f', cardShadow: '#1f4f1f',
+                avatarBorder: '#5fb05f', avatarGlow: '#b0ffb0'
+            },
+            { 
+                name: '🦇 Ночные твари', 
+                bg: '#1c1427', 
+                panelBorder: '#8f6ac0', panelGlow: '#cba9ff',
+                tabBottom: '#6f4a9f', tabActive: '#5f3a8f', tabGlow: '#cba9ff',
+                contentBorder: '#7f5ab0', titleLine: '#9f7ad0',
+                cardBorder: '#7f5ab0', cardShadow: '#3e2a5a',
+                avatarBorder: '#8f6ac0', avatarGlow: '#dbbbff'
+            },
+            { 
+                name: '☠️ Яды', 
+                bg: '#1e2a1a', 
+                panelBorder: '#8fc55f', panelGlow: '#c6ff96',
+                tabBottom: '#6fa53f', tabActive: '#5f952f', tabGlow: '#c6ff96',
+                contentBorder: '#7fb54f', titleLine: '#9fd56f',
+                cardBorder: '#7fb54f', cardShadow: '#2f5f2a',
+                avatarBorder: '#8fc55f', avatarGlow: '#daffaa'
+            },
+            { 
+                name: '🌊 Глубины', 
+                bg: '#122d3a', 
+                panelBorder: '#3fa5cf', panelGlow: '#8ed9ff',
+                tabBottom: '#1f85af', tabActive: '#0f759f', tabGlow: '#8ed9ff',
+                contentBorder: '#2f95bf', titleLine: '#4fb5df',
+                cardBorder: '#2f95bf', cardShadow: '#0f4560',
+                avatarBorder: '#3fa5cf', avatarGlow: '#a0e5ff'
+            },
+            { 
+                name: '🎭 Маски', 
+                bg: '#2d241a', 
+                panelBorder: '#cfa57f', panelGlow: '#ffdbb5',
+                tabBottom: '#b0855f', tabActive: '#a0754f', tabGlow: '#ffdbb5',
+                contentBorder: '#bf9570', titleLine: '#dfb590',
+                cardBorder: '#bf9570', cardShadow: '#6f4f35',
+                avatarBorder: '#cfa57f', avatarGlow: '#ffe5c8'
+            }
         ];
 
         // Функция получения 5 случайных тем
@@ -431,21 +507,26 @@
             return shuffled.slice(0, count);
         }
 
-        // применить тему к странице (меняем css переменные)
+        // ПРИМЕНЕНИЕ ТЕМЫ ко всем переменным css
         function applyTheme(theme) {
-            document.body.style.setProperty('--bg-main', theme.bg);
-            document.body.style.setProperty('--panel-border', theme.border + '80'); // полупрозрачный
-            document.body.style.setProperty('--panel-inset', theme.border + '4d');
-            document.body.style.setProperty('--tab-border', theme.border);
-            document.body.style.setProperty('--tab-active-bg', theme.card);
-            document.body.style.setProperty('--tab-active-glow', theme.border);
-            document.body.style.setProperty('--content-border', theme.border);
-            document.body.style.setProperty('--title-border', theme.border);
-            document.body.style.setProperty('--card-border', theme.card);
-            document.body.style.setProperty('--card-shadow', '#2f1f1f');
+            document.body.style.backgroundColor = theme.bg; // напрямую для body
+            
+            // устанавливаем CSS-переменные
+            document.body.style.setProperty('--bg-color', theme.bg);
+            document.body.style.setProperty('--panel-border', theme.panelBorder);
+            document.body.style.setProperty('--panel-glow', theme.panelGlow);
+            document.body.style.setProperty('--tab-bottom', theme.tabBottom);
+            document.body.style.setProperty('--tab-active', theme.tabActive);
+            document.body.style.setProperty('--tab-active-glow', theme.tabGlow);
+            document.body.style.setProperty('--content-border', theme.contentBorder);
+            document.body.style.setProperty('--title-line', theme.titleLine);
+            document.body.style.setProperty('--card-border', theme.cardBorder);
+            document.body.style.setProperty('--card-shadow', theme.cardShadow);
+            document.body.style.setProperty('--avatar-border', theme.avatarBorder);
+            document.body.style.setProperty('--avatar-glow', theme.avatarGlow);
         }
 
-        // заполнить сетку тем для контейнера
+        // заполнение сетки тем (и добавление клика)
         function renderTopics(container, person) {
             const selectedThemes = getRandomThemes(5);
             container.innerHTML = '';
@@ -453,7 +534,7 @@
                 const card = document.createElement('div');
                 card.className = 'topic-card';
                 card.innerHTML = `<i class="fas ${person === 'x' ? 'fa-biohazard' : 'fa-star-and-crescent'}"></i>${t.name}`;
-                // при клике меняем тему всей страницы
+                // клик = смена всей цветовой схемы
                 card.addEventListener('click', (e) => {
                     e.stopPropagation();
                     applyTheme(t);
@@ -462,11 +543,10 @@
             });
         }
 
-        // инициализация тем для xammers и atlizon
         renderTopics(document.getElementById('xammersTopics'), 'x');
         renderTopics(document.getElementById('atlizonTopics'), 'a');
 
-        // ----- вставка ссылок (ворки) -----
+        // ========== ВОРКИ (ссылки) ==========
         function buildLinksHTML() {
             let html = '<div class="link-grid">';
             workUrls.forEach(url => {
@@ -481,7 +561,7 @@
         workLinksX.innerHTML = linksHTML;
         workLinksA.innerHTML = linksHTML;
 
-        // ----- кнопки WORK (показать/скрыть ссылки) -----
+        // ========== КНОПКИ WORK (показать/скрыть) ==========
         const btnX = document.getElementById('workBtnX');
         const btnA = document.getElementById('workBtnA');
         function toggleLinks(btn, linksContainer) {
@@ -493,7 +573,7 @@
         btnX.addEventListener('click', () => toggleLinks(btnX, workLinksX));
         btnA.addEventListener('click', () => toggleLinks(btnA, workLinksA));
 
-        // ----- переключение табов xammers/atlizon -----
+        // ========== ПЕРЕКЛЮЧЕНИЕ ТАБОВ ==========
         const tabX = document.getElementById('tabXammers');
         const tabA = document.getElementById('tabAtlizon');
         const paneX = document.getElementById('paneXammers');
@@ -517,18 +597,6 @@
         tabX.addEventListener('click', () => setActiveTab('x'));
         tabA.addEventListener('click', () => setActiveTab('a'));
         setActiveTab('x');
-
-        // ----- МУЗЫКА: автоплей + защита от блокировки -----
-        const audio = document.getElementById('bgMusic');
-        audio.volume = 0.6; // комфортная громкость
-        audio.play().catch(e => {
-            // если автоплей заблокирован, запустим после первого клика в любом месте
-            document.addEventListener('click', function initAudio() {
-                audio.play().catch(() => {});
-            }, { once: true });
-        });
-
-        // для уверенности также после любой активации таба (если вдруг)
     })();
 </script>
 </body>
