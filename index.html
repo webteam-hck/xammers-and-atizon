@@ -79,7 +79,7 @@
 
         /* музыка */
         .music-box {
-            display: flex;
+            display: none; /* скрыто по умолчанию, покажем если файл есть */
             align-items: center;
             gap: 15px;
             background: #1e1522;
@@ -354,7 +354,6 @@
 </head>
 <body>
 <div class="main-panel">
-    <!-- верх с аватарами и музыкой -->
     <div class="top-row">
         <div class="avatars">
             <div class="avatar-item xammers">
@@ -366,24 +365,19 @@
                 <span class="avatar-name">atlizon</span>
             </div>
         </div>
-        <!-- МУЗЫКА - файл music.mp3 из репозитория -->
-        <div class="music-box">
+        <div class="music-box" id="musicContainer">
             <i class="fas fa-compact-disc music-icon"></i>
-            <audio id="globalAudio" controls autoplay loop>
+            <audio id="globalAudio" controls loop>
                 <source src="music.mp3" type="audio/mpeg">
-                <source src="music.ogg" type="audio/ogg">
-                Ваш браузер не поддерживает аудио
             </audio>
         </div>
     </div>
 
-    <!-- табы -->
     <div class="tab-container">
         <button class="tab active" id="tabX">XAMMERS</button>
         <button class="tab" id="tabA">ATLIZON</button>
     </div>
 
-    <!-- панель XAMMERS -->
     <div class="content-pane active" id="paneX">
         <div class="info-row">
             <div class="info-card">
@@ -405,7 +399,6 @@
         </div>
     </div>
 
-    <!-- панель ATLIZON -->
     <div class="content-pane" id="paneA">
         <div class="info-row">
             <div class="info-card">
@@ -434,17 +427,26 @@
 
 <script>
     (function() {
-        // ========== МУЗЫКА ==========
+        // ========== МУЗЫКА (Логика наличия файла) ==========
         const audio = document.getElementById('globalAudio');
-        audio.volume = 0.5;
-        // форсированный автоплей
-        audio.play().catch(() => {
-            // если не получилось - запустим при первом взаимодействии
-            document.addEventListener('click', function once() {
-                audio.play().catch(() => {});
-                document.removeEventListener('click', once);
-            });
-        });
+        const musicContainer = document.getElementById('musicContainer');
+        
+        // Проверяем, существует ли файл music.mp3
+        fetch('music.mp3', { method: 'HEAD' })
+            .then(response => {
+                if (response.ok) {
+                    musicContainer.style.display = 'flex'; // Показываем плеер
+                    audio.volume = 0.5;
+                    
+                    // Автоплей при первом клике (требование браузеров)
+                    const playAudio = () => {
+                        audio.play().catch(() => {});
+                        document.removeEventListener('click', playAudio);
+                    };
+                    document.addEventListener('click', playAudio);
+                }
+            })
+            .catch(() => console.log('Music file not found.'));
 
         // ========== СПИСОК WORK ССЫЛОК ==========
         const workUrls = [
@@ -456,7 +458,6 @@
             "https://telegra.ph/work-16-03-16-2", "https://telegra.ph/work-16-03-16", "https://telegra.ph/work-18-03-16"
         ];
 
-        // заполнение списков WORK
         function buildLinks() {
             let html = '<div class="link-grid">';
             workUrls.forEach(url => {
@@ -469,18 +470,16 @@
         document.getElementById('workListX').innerHTML = buildLinks();
         document.getElementById('workListA').innerHTML = buildLinks();
 
-        // ========== ТЕМЫ (названия со скриншота + остальные) ==========
+        // ========== ТЕМЫ ==========
         const themeNames = [
             'Адское пламя', 'Киберпанк', 'Яды', 'Затмение', 'Кровавая луна',
             'Некрополис', 'Ночные твари', 'ИИ восстание', 'Глубины', 'Маски'
         ];
 
-        // Функция для получения 5 случайных тем
         function getRandomThemes() {
             return [...themeNames].sort(() => 0.5 - Math.random()).slice(0, 5);
         }
 
-        // Цветовые схемы для каждой темы (чтобы при клике менялись все кнопки)
         const colorSchemes = {
             'Адское пламя': { main: '#c44', bg: '#2f120a', border: '#e77', active: '#b33', glow: '#f99' },
             'Киберпанк': { main: '#5fa0ff', bg: '#0a1122', border: '#7fb0ff', active: '#3f7fdf', glow: '#aac9ff' },
@@ -494,7 +493,6 @@
             'Маски': { main: '#cf9f6f', bg: '#2a1e15', border: '#efc09f', active: '#af7f4f', glow: '#ffdbb5' }
         };
 
-        // функция применения цветовой схемы
         function applyTheme(themeName) {
             const colors = colorSchemes[themeName] || colorSchemes['Кровавая луна'];
             document.body.style.backgroundColor = colors.bg;
@@ -520,7 +518,6 @@
             document.documentElement.style.setProperty('--footer-border', colors.border);
         }
 
-        // заполнение сеток тем
         function fillThemes(containerId, icon) {
             const container = document.getElementById(containerId);
             const themes = getRandomThemes();
