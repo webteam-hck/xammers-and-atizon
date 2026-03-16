@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>xammers · atlizon · темы</title>
+    <title>xammers · atlizon · audio</title>
     <style>
         * {
             margin: 0;
@@ -12,32 +12,33 @@
         }
 
         body {
-            font-family: 'Courier New', Courier, monospace;
+            font-family: 'Inter', 'Courier New', monospace;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            padding: 16px;
             transition: background-color 0.4s ease, color 0.3s ease;
+            background-color: #0a0a0a;
         }
 
-        /* темы (5 штук) — применяются к body, влияют на фон и общий цвет текста */
+        /* темы (5 штук) */
         body.theme-dark {
             background-color: #0c0c0c;
             color: #f0f0f0;
         }
         body.theme-dark .container {
-            background: rgba(10, 10, 10, 0.85);
+            background: rgba(15, 15, 20, 0.75);
             border-color: #ff5e5e;
-            box-shadow: 0 0 30px rgba(255, 80, 80, 0.3);
+            box-shadow: 0 20px 40px rgba(255, 80, 80, 0.25);
         }
 
         body.theme-light {
-            background-color: #ece4db;
+            background-color: #eae2d7;
             color: #1e1e1e;
         }
         body.theme-light .container {
-            background: rgba(250, 245, 235, 0.8);
+            background: rgba(255, 250, 240, 0.8);
             border-color: #b13e3e;
             color: #1e1e1e;
         }
@@ -46,53 +47,50 @@
         body.theme-light .container .button-link {
             color: #1e1e1e;
         }
-        body.theme-light .container .separator {
-            border-top-color: #1e1e1e;
-        }
 
         body.theme-neon {
-            background-color: #001f3f;
-            color: #c0ffc0;
+            background-color: #002b36;
+            color: #aaffdd;
         }
         body.theme-neon .container {
-            background: rgba(0, 30, 30, 0.85);
+            background: rgba(0, 40, 50, 0.8);
             border-color: #5effae;
-            box-shadow: 0 0 25px #1aff8c;
+            box-shadow: 0 20px 40px #1aff8c33;
         }
 
         body.theme-blood {
             background-color: #1a0000;
-            color: #ffcaca;
+            color: #ffcfcf;
         }
         body.theme-blood .container {
-            background: rgba(40, 5, 5, 0.9);
+            background: rgba(45, 10, 10, 0.85);
             border-color: #ff5f5f;
-            box-shadow: 0 0 30px #b30000;
+            box-shadow: 0 20px 40px #b3000080;
         }
 
         body.theme-ocean {
-            background-color: #011c2c;
-            color: #b3eaff;
+            background-color: #012b39;
+            color: #c0eaff;
         }
         body.theme-ocean .container {
-            background: rgba(2, 35, 50, 0.85);
+            background: rgba(5, 40, 55, 0.8);
             border-color: #40c8ff;
-            box-shadow: 0 0 30px #0077be;
+            box-shadow: 0 20px 40px #0077be80;
         }
 
-        /* контейнер с закруглёнными углами и блюром */
+        /* контейнер компактный, модный, с блюром */
         .container {
-            max-width: 780px;
+            max-width: 680px;
             width: 100%;
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            border: 2px solid;
-            border-radius: 42px;
-            padding: 40px 35px;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1.5px solid;
+            border-radius: 36px;
+            padding: 28px 26px;
             transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s;
         }
 
-        /* все остальные углы тоже закругляем */
+        /* все углы закруглены, мелкие детали */
         .tabs-row,
         .work-display,
         .avatar,
@@ -104,46 +102,245 @@
         .tab-item,
         .button-link,
         .work-link,
-        .main-title {
+        .main-title,
+        .audio-player,
+        .theme-switcher {
             border-radius: 24px;
         }
 
         .avatar {
-            border-radius: 50%; /* оставляем круглую аватарку */
+            border-radius: 50%; /* аватарки круглые */
         }
 
-        /* переключатель тем (пять точек) */
+        /* переключатель тем (пять точек) — компактный */
         .theme-switcher {
             display: flex;
             justify-content: flex-end;
-            gap: 12px;
-            margin-bottom: 30px;
+            gap: 10px;
+            margin-bottom: 24px;
             flex-wrap: wrap;
         }
 
         .theme-dot {
-            width: 42px;
-            height: 42px;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
             cursor: pointer;
             border: 2px solid rgba(255, 255, 255, 0.5);
-            transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+            transition: transform 0.2s, box-shadow 0.2s;
             box-shadow: 0 0 10px currentColor;
         }
 
         .theme-dot:hover {
             transform: scale(1.2);
             border-color: white;
-            box-shadow: 0 0 20px currentColor;
         }
 
-        .theme-dot[data-theme="dark"] { background: #1a1a1a; box-shadow: 0 0 12px #aaa; }
-        .theme-dot[data-theme="light"] { background: #f0e7d6; box-shadow: 0 0 12px #bba87f; }
-        .theme-dot[data-theme="neon"] { background: #00cc66; box-shadow: 0 0 15px #00ff88; }
-        .theme-dot[data-theme="blood"] { background: #8b0000; box-shadow: 0 0 15px #ff4d4d; }
-        .theme-dot[data-theme="ocean"] { background: #0077be; box-shadow: 0 0 15px #3fa0e0; }
+        .theme-dot[data-theme="dark"] { background: #1a1a1a; }
+        .theme-dot[data-theme="light"] { background: #f0e7d6; }
+        .theme-dot[data-theme="neon"] { background: #00cc66; }
+        .theme-dot[data-theme="blood"] { background: #8b0000; }
+        .theme-dot[data-theme="ocean"] { background: #0077be; }
 
-        /* кровоточащий эффект (управляется js) */
+        /* аудиоплеер стильный минимализм */
+        .audio-player {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid currentColor;
+            padding: 12px 20px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            backdrop-filter: blur(4px);
+        }
+
+        .audio-player audio {
+            width: 100%;
+            height: 40px;
+            border-radius: 30px;
+            background: transparent;
+        }
+
+        /* заголовок */
+        .main-title {
+            font-size: 2.4rem;
+            font-weight: 700;
+            margin-bottom: 24px;
+            text-transform: lowercase;
+            letter-spacing: -0.5px;
+            border-bottom: 1.5px solid currentColor;
+            padding-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+        }
+
+        .tabs-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px 16px;
+            font-size: 1.9rem;
+            font-weight: 600;
+            margin-bottom: 30px;
+            border-bottom: 1.5px solid currentColor;
+            padding: 8px 12px 16px 12px;
+            text-transform: lowercase;
+        }
+
+        .tab-item {
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.2s;
+            position: relative;
+            white-space: nowrap;
+            padding: 0 6px;
+        }
+
+        .tab-item.active {
+            font-weight: 900;
+            text-decoration: underline;
+            text-underline-offset: 6px;
+            text-decoration-thickness: 2px;
+        }
+
+        .work-display {
+            margin: 20px 0 30px 10px;
+            padding: 5px 15px;
+        }
+
+        .work-label {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            text-transform: lowercase;
+        }
+
+        .work-link {
+            font-size: 1.5rem;
+            text-decoration: underline dashed 1px #888;
+            display: inline-block;
+            word-break: break-all;
+            margin-bottom: 20px;
+            text-underline-offset: 6px;
+            padding: 5px 10px;
+        }
+
+        .separator {
+            border-top: 1.5px solid currentColor;
+            margin: 20px 0 20px 0;
+            opacity: 0.7;
+        }
+
+        /* аватарки */
+        .avatar-pair {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin: 10px 0 8px 0;
+        }
+
+        .avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 2.5px solid currentColor;
+            background: rgba(128,128,128,0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.4rem;
+            overflow: hidden;
+            backdrop-filter: blur(2px);
+        }
+
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .avatar-names {
+            display: flex;
+            justify-content: center;
+            gap: 70px;
+            margin: 5px 0 20px 0;
+            font-weight: 700;
+            font-size: 1.3rem;
+            text-transform: uppercase;
+        }
+
+        .duo-names {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 5px;
+            margin: 15px 0 20px 0;
+            font-size: 2.2rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            line-height: 1.1;
+            padding: 8px 16px;
+        }
+
+        .duo-names .right {
+            margin-left: 50px;
+        }
+
+        .buttons-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 24px;
+            font-size: 1.7rem;
+            font-weight: 600;
+            margin: 20px 0 20px 0;
+            text-transform: lowercase;
+            align-items: center;
+            padding: 8px 12px;
+        }
+
+        .button-link {
+            text-decoration: none;
+            border-bottom: 1.5px solid transparent;
+            transition: 0.2s;
+            cursor: pointer;
+            padding: 4px 8px;
+        }
+
+        .button-link:hover {
+            border-bottom-color: currentColor;
+        }
+
+        .bottom-dm {
+            font-size: 1.7rem;
+            font-weight: 600;
+            margin: 10px 0 20px 0;
+            text-transform: lowercase;
+            display: flex;
+            justify-content: flex-start;
+            padding: 5px 16px;
+        }
+
+        .footer-note {
+            font-size: 1.3rem;
+            margin-top: 20px;
+            border-top: 1.5px solid currentColor;
+            padding: 18px 16px 0 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .paper-plane {
+            font-size: 1.7rem;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        /* blood effect */
         .blood-hover {
             position: relative;
             display: inline-block;
@@ -175,7 +372,7 @@
 
         .blood-hover:hover {
             color: #ffffff !important;
-            text-shadow: 0 0 8px #ff4d4d, 0 0 15px red;
+            text-shadow: 0 0 8px #ff4d4d;
         }
 
         .blood-hover:hover::before {
@@ -185,209 +382,26 @@
 
         @keyframes drip {
             0% { transform: translateY(0) scale(1); filter: blur(6px); opacity: 0.8; }
-            100% { transform: translateY(14px) scale(1.3); filter: blur(12px); opacity: 0.3; }
+            100% { transform: translateY(12px) scale(1.3); filter: blur(12px); opacity: 0.3; }
         }
 
-        /* заголовок */
-        .main-title {
-            font-size: 2.8rem;
-            font-weight: 700;
-            line-height: 1.2;
-            margin-bottom: 30px;
-            text-transform: lowercase;
-            letter-spacing: -0.5px;
-            border-bottom: 2px solid currentColor;
-            padding-bottom: 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-            flex-wrap: wrap;
-            border-radius: 0; /* убираем лишний радиус */
-        }
-
-        .tabs-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 5px 20px;
-            font-size: 2.2rem;
-            font-weight: 600;
-            margin-bottom: 40px;
-            border-bottom: 2px solid currentColor;
-            padding: 10px 10px 20px 10px;
-            text-transform: lowercase;
-        }
-
-        .tab-item {
-            cursor: pointer;
-            user-select: none;
-            transition: all 0.2s;
-            position: relative;
-            white-space: nowrap;
-            padding: 0 6px;
-        }
-
-        .tab-item.active {
-            font-weight: 900;
-            text-decoration: underline;
-            text-underline-offset: 8px;
-            text-decoration-thickness: 3px;
-        }
-
-        .work-display {
-            margin: 30px 0 40px 20px;
-            padding: 5px 15px;
-        }
-
-        .work-label {
-            font-size: 2.3rem;
-            font-weight: 600;
-            margin-bottom: 12px;
-            text-transform: lowercase;
-        }
-
-        .work-link {
-            font-size: 1.8rem;
-            text-decoration: underline dashed 1.5px #888;
-            display: inline-block;
-            word-break: break-all;
-            margin-bottom: 30px;
-            text-underline-offset: 8px;
-            padding: 5px 10px;
-        }
-
-        .separator {
-            border-top: 2px solid currentColor;
-            margin: 30px 0 30px 0;
-            opacity: 0.8;
-            border-radius: 0;
-        }
-
-        .avatar-pair {
-            display: flex;
-            justify-content: center;
-            gap: 60px;
-            margin: 15px 0 10px 0;
-        }
-
-        .avatar {
-            width: 90px;
-            height: 90px;
-            border-radius: 50%;
-            border: 3px solid currentColor;
-            background: rgba(128,128,128,0.2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2.8rem;
-            overflow: hidden;
-            backdrop-filter: blur(2px);
-        }
-
-        .avatar img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-
-        .avatar-names {
-            display: flex;
-            justify-content: center;
-            gap: 90px;
-            margin: 8px 0 25px 0;
-            font-weight: 700;
-            font-size: 1.5rem;
-            text-transform: uppercase;
-        }
-
-        .duo-names {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 8px;
-            margin: 20px 0 25px 0;
-            font-size: 2.6rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            line-height: 1.2;
-            padding: 10px 20px;
-        }
-
-        .duo-names .right {
-            margin-left: 60px;
-        }
-
-        .buttons-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 40px;
-            font-size: 2rem;
-            font-weight: 600;
-            margin: 30px 0 25px 0;
-            text-transform: lowercase;
-            align-items: center;
-            padding: 10px 15px;
-        }
-
-        .button-link {
-            text-decoration: none;
-            border-bottom: 2px solid transparent;
-            transition: 0.2s;
-            cursor: pointer;
-            background-color: transparent;
-            padding: 5px 10px;
-        }
-
-        .button-link:hover {
-            border-bottom-color: currentColor;
-        }
-
-        .bottom-dm {
-            font-size: 2rem;
-            font-weight: 600;
-            margin: 15px 0 25px 0;
-            text-transform: lowercase;
-            display: flex;
-            justify-content: flex-start;
-            padding: 5px 20px;
-        }
-
-        .footer-note {
-            font-size: 1.5rem;
-            margin-top: 30px;
-            border-top: 2px solid currentColor;
-            padding: 20px 20px 0 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .paper-plane {
-            font-size: 2rem;
-        }
-
-        a {
-            color: inherit;
-            text-decoration: none;
-        }
-
-        @media (max-width: 550px) {
+        @media (max-width: 500px) {
+            .container { padding: 20px; }
             .main-title { font-size: 2rem; }
-            .tabs-row { font-size: 1.6rem; gap: 10px; }
-            .work-label { font-size: 1.7rem; }
-            .work-link { font-size: 1.3rem; }
-            .duo-names { font-size: 2rem; }
-            .buttons-row { font-size: 1.5rem; gap: 20px; }
-            .bottom-dm { font-size: 1.5rem; }
-            .avatar-pair { gap: 30px; }
+            .tabs-row { font-size: 1.5rem; }
+            .work-label { font-size: 1.6rem; }
+            .work-link { font-size: 1.2rem; }
+            .duo-names { font-size: 1.8rem; }
+            .buttons-row { font-size: 1.4rem; gap: 15px; }
+            .avatar-pair { gap: 20px; }
             .avatar-names { gap: 40px; }
         }
     </style>
 </head>
-<body class="theme-dark"> <!-- стартовая тема -->
+<body class="theme-dark">
     <div class="container">
 
-        <!-- переключатель 5 тем (кружки) -->
+        <!-- переключатель 5 тем -->
         <div class="theme-switcher">
             <div class="theme-dot" data-theme="dark" title="тёмная"></div>
             <div class="theme-dot" data-theme="light" title="светлая"></div>
@@ -396,13 +410,21 @@
             <div class="theme-dot" data-theme="ocean" title="океан"></div>
         </div>
 
-        <!-- шапка: xammers and atlizon -->
+        <!-- АУДИОПЛЕЕР: если music.mp3 есть в папке, будет играть -->
+        <div class="audio-player">
+            <audio controls loop>
+                <source src="music.mp3" type="audio/mpeg">
+                Ваш браузер не поддерживает аудио.
+            </audio>
+        </div>
+
+        <!-- шапка -->
         <div class="main-title">
             <span>xammers and atlizon</span>
             <span>✦</span>
         </div>
 
-        <!-- Work 1 | Work 2 | Work 3 | Work 4 | Work 5 -->
+        <!-- Work табы -->
         <div class="tabs-row" id="tabsContainer">
             <span class="tab-item blood-hover active" data-work="1">Work 1</span> |
             <span class="tab-item blood-hover" data-work="2">Work 2</span> |
@@ -411,7 +433,7 @@
             <span class="tab-item blood-hover" data-work="5">Work 5</span>
         </div>
 
-        <!-- динамическая работа + ссылка -->
+        <!-- работа + ссылка -->
         <div class="work-display" id="workDisplay">
             <div class="work-label" id="workLabel">работа 1</div>
             <a href="https://telegra.ph/Work-1-03-16" target="_blank" class="work-link blood-hover" id="workLink">telegra.ph/Work-1-03-16</a>
@@ -419,7 +441,7 @@
 
         <div class="separator"></div>
 
-        <!-- аватарки (avatar1.jpg, avatar2.jpg) -->
+        <!-- АВАТАРКИ: xammers — avatar1.jpg, atlizon — avatar2.jpg -->
         <div class="avatar-pair">
             <div class="avatar">
                 <img src="avatar1.jpg" alt="xammers" onerror="this.onerror=null; this.parentElement.innerHTML='X';">
@@ -433,7 +455,7 @@
             <span>ATLIZON</span>
         </div>
 
-        <!-- крупные имена XAMMERS и ATLIZON -->
+        <!-- крупные имена -->
         <div class="duo-names">
             <span class="left blood-hover">XAMMERS</span>
             <span class="right blood-hover">ATLIZON</span>
@@ -441,7 +463,7 @@
 
         <div class="separator"></div>
 
-        <!-- первая строка кнопок -->
+        <!-- кнопки -->
         <div class="buttons-row">
             <a href="https://t.me/MenaceLink" target="_blank" class="button-link blood-hover">КАНАЛ</a>
             <a href="https://t.me/melanholbio" target="_blank" class="button-link blood-hover">ПЕРЕХОДНИК</a>
@@ -477,7 +499,7 @@
                 });
             });
 
-            // переключение работ (табы)
+            // переключение работ
             const tabs = document.querySelectorAll('.tab-item');
             const workLabel = document.getElementById('workLabel');
             const workLink = document.getElementById('workLink');
@@ -493,9 +515,7 @@
             function setActiveTab(workId) {
                 tabs.forEach(tab => {
                     tab.classList.remove('active');
-                    if (tab.dataset.work == workId) {
-                        tab.classList.add('active');
-                    }
+                    if (tab.dataset.work == workId) tab.classList.add('active');
                 });
                 if (workData[workId]) {
                     workLabel.textContent = workData[workId].label;
@@ -505,9 +525,8 @@
             }
 
             tabs.forEach(tab => {
-                tab.addEventListener('click', function(e) {
-                    const workId = this.dataset.work;
-                    if (workId) setActiveTab(workId);
+                tab.addEventListener('click', function() {
+                    setActiveTab(this.dataset.work);
                 });
             });
             setActiveTab('1');
@@ -515,15 +534,13 @@
             // переключение тем
             const themeDots = document.querySelectorAll('.theme-dot');
             const body = document.body;
-
             themeDots.forEach(dot => {
                 dot.addEventListener('click', function() {
-                    const theme = this.dataset.theme; // dark, light, neon, blood, ocean
-                    body.className = ''; // сброс
-                    body.classList.add(`theme-${theme}`);
+                    body.className = '';
+                    body.classList.add(`theme-${this.dataset.theme}`);
                 });
             });
         })();
     </script>
 </body>
-</html>
+                    </html>
