@@ -83,35 +83,9 @@
         .xammers .avatar-name { color: #ff7b7b; }
         .atlizon .avatar-name { color: #b5a0ff; }
 
-        /* плеер минималистичный */
-        .music-area {
-            background: #1e1b22;
-            border-radius: 60px;
-            padding: 8px 18px;
-            border: 1px solid #a55;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            color: #f0c0c0;
-            box-shadow: 0 0 10px #c43;
-        }
-
-        .music-icon {
-            font-size: 1.8rem;
-            color: #d66;
-            animation: pulseGlow 2s infinite;
-        }
-
-        @keyframes pulseGlow {
-            0% { text-shadow: 0 0 2px #f99; }
-            50% { text-shadow: 0 0 15px #f33; }
-            100% { text-shadow: 0 0 2px #f99; }
-        }
-
-        .music-controls audio {
-            height: 38px;
-            filter: sepia(0.4) hue-rotate(310deg) brightness(1.1);
-            border-radius: 40px;
+        /* музыка автоматическая, плеер скрыт */
+        .hidden-audio {
+            display: none;
         }
 
         /* табы (основная навигация) */
@@ -181,7 +155,7 @@
             text-transform: uppercase;
         }
 
-        /* сетка тем (5 штук) */
+        /* сетка тем (5 штук) — ТЕПЕРЬ КЛИКАБЕЛЬНЫЕ */
         .topics-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -200,7 +174,7 @@
             color: #ffd9b0;
             transition: 0.2s;
             box-shadow: 0 7px 0 #3f1c1c;
-            cursor: default;
+            cursor: pointer; /* стал указатель, потому что темы РАБОТАЮТ */
             backdrop-filter: blur(4px);
         }
 
@@ -215,6 +189,32 @@
             transform: translateY(-4px);
             border-color: #f66;
             box-shadow: 0 11px 0 #6f2b2b;
+        }
+
+        /* всплывающее уведомление (темы работают) */
+        .topic-toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #2c0a0a;
+            border: 3px solid #b33;
+            color: #ffcaca;
+            padding: 16px 32px;
+            border-radius: 60px;
+            font-weight: bold;
+            font-size: 1.5rem;
+            letter-spacing: 2px;
+            box-shadow: 0 0 30px #f33;
+            z-index: 9999;
+            opacity: 0;
+            transition: opacity 0.2s;
+            pointer-events: none;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+        .topic-toast.show {
+            opacity: 1;
         }
 
         /* КНОПКА WORK (с эффектом капающей крови) */
@@ -244,7 +244,7 @@
             line-height: 1;
         }
 
-        /* эффект капающей крови (псевдоэлементы) */
+        /* эффект капающей крови */
         .work-btn::before,
         .work-btn::after {
             content: "";
@@ -293,14 +293,13 @@
             100% { transform: translateY(-80px) scale(0.2); opacity: 0; }
         }
 
-        /* чтобы кнопка не обрезала капли */
         .work-btn:hover {
             transform: scale(1.02);
             background: #551818;
             border-color: #f33;
         }
 
-        /* контейнер со списком ссылок (изначально скрыт) */
+        /* контейнер со списком ссылок */
         .work-links {
             background: #1f1722;
             border-radius: 40px;
@@ -365,7 +364,7 @@
             text-shadow: 0 0 10px #f33;
         }
 
-        /* скролл бар */
+        /* скролл */
         .work-links::-webkit-scrollbar {
             width: 12px;
         }
@@ -379,7 +378,6 @@
             border-radius: 20px;
         }
 
-        /* адаптация */
         @media (max-width: 700px) {
             .work-btn { font-size: 2rem; padding: 15px 30px; }
             .signature { font-size: 1.5rem; }
@@ -389,12 +387,11 @@
 <body>
 
 <div class="glass-panel">
-    <!-- верх: аватарки + музыка -->
+    <!-- верх: аватарки + СКРЫТЫЙ АВТОМАТИЧЕСКИЙ ПЛЕЕР -->
     <div class="top-bar">
         <div class="avatars">
             <!-- xammers -->
             <div class="avatar-block xammers">
-                <!-- avatar1.jpg для xammers -->
                 <img src="avatar1.jpg" alt="xammers" class="avatar-img" onerror="this.src='https://via.placeholder.com/52/a33/fff?text=X'">
                 <span class="avatar-name">xammers</span>
             </div>
@@ -405,27 +402,15 @@
             </div>
         </div>
 
-        <!-- Музыкальный плеер (music.html функциональность) 
-             Если файл music.html существует в репозитории, можно использовать его как fallback?
-             но проще встроить аудио. В условии: "если я добавлю файл в репозитории music.html и проигрывалась музыка".
-             Сделаем хитро: если music.html загрузить как аудио не выйдет, но можно создать аудиоэлемент с треком.
-             Для соответствия ожиданию добавим скрытый iframe с music.html? но вероятнее нужен просто аудиоплеер.
-             Реализуем audio с файлом, который пользователь сможет загрузить (music.mp3 или .ogg). А music.html может содержать плеер.
-             Поскольку нужен именно работающий плеер, я вставлю audio с тестовым файлом, но если пользователь положит music.html в корень — ничего не сломается.
-        -->
-        <div class="music-area">
-            <div class="music-icon"><i class="fas fa-headphones-alt"></i></div>
-            <div class="music-controls">
-                <audio controls loop>
-                    <source src="music.mp3" type="audio/mpeg">
-                    <source src="music.ogg" type="audio/ogg">
-                    <!-- если в репозитории будет music.html, он не проиграется как аудио, 
-                         но можно подгрузить его скрытно? нет, лучше стандартный плеер.
-                         Добавим сообщение если нет файла, но плеер отобразится -->
-                    Your browser does not support audio.
-                </audio>
-            </div>
-        </div>
+        <!-- скрытый аудио с автоплеем (без элементов управления) -->
+        <audio id="bgMusic" class="hidden-audio" autoplay loop playsinline>
+            <source src="music.mp3" type="audio/mpeg">
+            <source src="music.ogg" type="audio/ogg">
+            <!-- если нет файла – браузер промолчит, но плеер скрыт и автоматический -->
+        </audio>
+
+        <!-- просто иконка звука (ненавязчивая) для красоты, но плеера нет -->
+        <div class="music-icon" style="color:#b44; font-size:2rem;"><i class="fas fa-music"></i></div>
     </div>
 
     <!-- Табы: xammers / atlizon -->
@@ -439,7 +424,7 @@
         <!-- ПАНЕЛЬ XAMMERS -->
         <div class="tab-pane active-pane" id="paneXammers">
             <div class="section-title"><i class="fas fa-bolt"></i> темы xammers · хаос</div>
-            <!-- 5 рандомных тем (для xammers) -->
+            <!-- 5 рандомных тем для xammers (сгенерируются через js) -->
             <div class="topics-grid" id="xammersTopics"></div>
             <!-- Кнопка WORK + ссылки -->
             <div class="work-wrapper">
@@ -465,9 +450,12 @@
     </div>
 </div>
 
+<!-- тост для уведомления что тема работает -->
+<div id="topicToast" class="topic-toast">🔥 тема активирована</div>
+
 <script>
     (function() {
-        // ----- СПИСОК ССЫЛОК (точно по заданию) -----
+        // ----- СПИСОК ССЫЛОК -----
         const workUrls = [
             "https://telegra.ph/Work-1-03-16",
             "https://telegra.ph/work-2-03-16",
@@ -489,40 +477,59 @@
             "https://telegra.ph/work-18-03-16"
         ];
 
-        // ----- 5 рандомных тем для каждого (можно набор побольше, выберем случайные) -----
+        // ----- ПУЛ ТЕМ (для генерации 5 случайных) -----
         const topicsPool = [
             "🔮 Киберпанк", "💀 Бессмертие", "🩸 Вампиры", "👁️ Иллюминаты", "🌑 Затмение",
             "⚡ Электричество", "🧠 ИИ восстание", "🎭 Маски", "🗝️ Тайны прошлого", "☠️ Яды",
             "🕸️ Паутина", "🔥 Адское пламя", "🌊 Глубины", "🧿 Сглаз", "🍷 Кровавая луна",
-            "🏴‍☠️ Призраки", "🎸 Рок-н-ролл", "🦇 Ночные твари", "📿 Проклятия", "🗡️ Клинки"
+            "🏴‍☠️ Призраки", "🎸 Рок-н-ролл", "🦇 Ночные твари", "📿 Проклятия", "🗡️ Клинки",
+            "⚙️ Механизмы", "📡 Чужие", "🧬 Мутации", "🪦 Забвение", "🌋 Извержение"
         ];
 
-        // Функция перемешивания и взятия 5 случайных
+        // Функция получения 5 случайных тем
         function getRandomTopics(count = 5) {
             const shuffled = [...topicsPool].sort(() => 0.5 - Math.random());
             return shuffled.slice(0, count);
         }
 
-        // Заполняем сетки тем
+        // Заполняем сетки тем и делаем их КЛИКАБЕЛЬНЫМИ (работают)
         const xammersGrid = document.getElementById('xammersTopics');
         const atlizonGrid = document.getElementById('atlizonTopics');
 
-        function renderTopics(container, person) {
+        // тост
+        const toast = document.getElementById('topicToast');
+
+        function showToastMessage(text) {
+            toast.textContent = '🔥 ' + text + ' активирована';
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 1500);
+        }
+
+        function renderTopics(container, personName) {
             const topics = getRandomTopics(5);
             container.innerHTML = '';
             topics.forEach(t => {
                 const card = document.createElement('div');
                 card.className = 'topic-card';
-                // иконка плазмы
-                card.innerHTML = `<i class="fas ${person === 'x' ? 'fa-biohazard' : 'fa-star-and-crescent'}"></i>${t}`;
+                // иконка в зависимости от персонажа
+                const icon = (personName === 'xammers') ? 'fa-biohazard' : 'fa-star-and-crescent';
+                card.innerHTML = `<i class="fas ${icon}"></i>${t}`;
+                // при клике показываем, что тема работает
+                card.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    // тема РАБОТАЕТ: показываем всплывашку с названием темы
+                    showToastMessage(t);
+                });
                 container.appendChild(card);
             });
         }
 
-        renderTopics(xammersGrid, 'x');
-        renderTopics(atlizonGrid, 'a');
+        renderTopics(xammersGrid, 'xammers');
+        renderTopics(atlizonGrid, 'atlizon');
 
-        // ---- функция построения списка ссылок (вставляется в .work-links) ----
+        // ---- функция построения списка ссылок ----
         function buildLinksHTML() {
             let html = '<div class="link-grid">';
             workUrls.forEach(url => {
@@ -534,7 +541,7 @@
 
         const linksHTML = buildLinksHTML();
 
-        // Вставляем в оба контейнера (скрыты изначально)
+        // Вставляем ссылки в оба контейнера
         const workLinksX = document.getElementById('workLinksX');
         const workLinksA = document.getElementById('workLinksA');
         workLinksX.innerHTML = linksHTML;
@@ -544,9 +551,7 @@
         const btnX = document.getElementById('workBtnX');
         const btnA = document.getElementById('workBtnA');
 
-        // Функция toggle с закрытием другого при переключении табов? но проще:
         function toggleLinks(btn, linksContainer) {
-            // если уже показаны — скрываем, иначе показываем (и можно скрыть другие)
             const isVisible = linksContainer.classList.contains('show');
             // Скрываем оба контейнера (чтобы одновременно не висели)
             workLinksX.classList.remove('show');
@@ -573,7 +578,6 @@
         const paneA = document.getElementById('paneAtlizon');
 
         function setActiveTab(active) {
-            // сброс классов у кнопок
             tabX.classList.remove('active');
             tabA.classList.remove('active');
             paneX.classList.remove('active-pane');
@@ -595,25 +599,24 @@
         tabX.addEventListener('click', () => setActiveTab('x'));
         tabA.addEventListener('click', () => setActiveTab('a'));
 
-        // ----- эффект капающей крови уже в css, доп. нетривиально: -----
-        // дополнительно можно добавить иконки капель на кнопки, но всё есть.
-
-        // ----- подгрузка avatar1.jpg / avatar2.jpg – уже в img src, если нет – будет заглушка
-
-        // ----- дополнительная рандомизация тем при загрузке (уже сделана) -----
-        // но по желанию можно обновлять темы при клике на них? но не требуется.
-
-        // Также адаптив, все кнопки видны.
-        // Убедимся, что .work-btn не перекрыт.
-        // На мобильных всё ок.
-
-        // Инициализация: показываем панель xammers
+        // инициализация: xammers активен
         setActiveTab('x');
+
+        // ----- автоматическая музыка: плеер скрыт, играет фоном -----
+        // дополнительно: попытаемся заставить автоплей сработать в любом браузере
+        const audio = document.getElementById('bgMusic');
+        // если автоплей заблокирован, попробуем запустить после первого взаимодействия
+        // но по заданию "играет автоматически" — большинство браузеров глушат автоплей без взаимодействия.
+        // Добавим "ловушку": если аудио не играет, запустим после первого тапа (но сохраним скрытость)
+        document.body.addEventListener('click', function initAudio() {
+            if (audio.paused) {
+                audio.play().catch(e => console.log('autoplay prevented but user clicked'));
+            }
+        }, { once: true }); // сработает при первом клике в любом месте
+        // также попробуем сразу запустить (на всякий случай)
+        audio.play().catch(() => {}); 
     })();
 </script>
 
-<!-- Дополнительная магия: если music.mp3 отсутствует, плеер покажет элементы управления, но тишина.
-     пользователь сможет добавить music.mp3 или music.ogg в корень. 
-     music.html может быть загружен отдельно, но для воспроизведения мы используем стандартный тег audio -->
 </body>
-    </html>
+</html>
