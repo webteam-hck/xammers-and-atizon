@@ -77,14 +77,18 @@
         .xammers .avatar-name { color: #ff9f9f; }
         .atlizon .avatar-name { color: #cfb0ff; }
 
-        /* музыка */
+        /* Музыкальный плеер скрыт */
+        #globalAudio {
+            display: none;
+        }
+
         .music-box {
-            display: none; /* скрыто по умолчанию, покажем если файл есть */
+            display: flex;
             align-items: center;
             gap: 15px;
             background: #1e1522;
             border-radius: 60px;
-            padding: 8px 20px;
+            padding: 8px 25px;
             border: 2px solid var(--music-border, #b44);
         }
         .music-icon {
@@ -95,11 +99,6 @@
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
-        }
-        audio {
-            height: 40px;
-            width: 200px;
-            filter: hue-rotate(290deg) brightness(1.2);
         }
 
         /* табы */
@@ -365,9 +364,11 @@
                 <span class="avatar-name">atlizon</span>
             </div>
         </div>
-        <div class="music-box" id="musicContainer">
+        
+        <div class="music-box">
             <i class="fas fa-compact-disc music-icon"></i>
-            <audio id="globalAudio" controls loop>
+            <span style="color: #fcc; font-weight: bold; font-size: 1.2rem;">AUDIO ON</span>
+            <audio id="globalAudio" loop>
                 <source src="music.mp3" type="audio/mpeg">
             </audio>
         </div>
@@ -389,10 +390,8 @@
                 <a href="https://t.me/xammepc" target="_blank" class="info-link"><i class="fab fa-telegram"></i> @xammepc</a>
             </div>
         </div>
-
         <div class="theme-title"><i class="fas fa-bolt"></i> темы xammers · хаос</div>
         <div class="theme-grid" id="xThemes"></div>
-
         <div class="work-area">
             <button class="work-button" id="workBtnX"><i class="fas fa-tint"></i> WORK</button>
             <div class="work-list" id="workListX"></div>
@@ -410,10 +409,8 @@
                 <a href="https://t.me/atlizup" target="_blank" class="info-link"><i class="fab fa-telegram"></i> @atlizup</a>
             </div>
         </div>
-
         <div class="theme-title"><i class="fas fa-moon"></i> темы atlizon · мистика</div>
         <div class="theme-grid" id="aThemes"></div>
-
         <div class="work-area">
             <button class="work-button" id="workBtnA"><i class="fas fa-tint"></i> WORK</button>
             <div class="work-list" id="workListA"></div>
@@ -427,28 +424,30 @@
 
 <script>
     (function() {
-        // ========== МУЗЫКА (Логика наличия файла) ==========
+        // ========== ИСПРАВЛЕННАЯ МУЗЫКА ==========
         const audio = document.getElementById('globalAudio');
-        const musicContainer = document.getElementById('musicContainer');
-        
-        // Проверяем, существует ли файл music.mp3
-        fetch('music.mp3', { method: 'HEAD' })
-            .then(response => {
-                if (response.ok) {
-                    musicContainer.style.display = 'flex'; // Показываем плеер
-                    audio.volume = 0.5;
-                    
-                    // Автоплей при первом клике (требование браузеров)
-                    const playAudio = () => {
-                        audio.play().catch(() => {});
-                        document.removeEventListener('click', playAudio);
-                    };
-                    document.addEventListener('click', playAudio);
-                }
-            })
-            .catch(() => console.log('Music file not found.'));
+        audio.volume = 0.4;
 
-        // ========== СПИСОК WORK ССЫЛОК ==========
+        // Функция запуска музыки
+        function startMusic() {
+            audio.play().then(() => {
+                console.log("Playing...");
+                // Если заиграло, убираем слушателей
+                document.removeEventListener('click', startMusic);
+                document.removeEventListener('touchstart', startMusic);
+            }).catch(e => console.log("Waiting for interaction..."));
+        }
+
+        // Слушаем любой клик или касание по странице
+        document.addEventListener('click', startMusic);
+        document.addEventListener('touchstart', startMusic);
+
+        // Проверка наличия файла (визуально для консоли)
+        audio.onerror = function() {
+            console.error("Файл music.mp3 не найден или поврежден");
+        };
+
+        // ========== ОСТАЛЬНАЯ ЛОГИКА ==========
         const workUrls = [
             "https://telegra.ph/Work-1-03-16", "https://telegra.ph/work-2-03-16", "https://telegra.ph/work-3-03-16",
             "https://telegra.ph/work-4-03-16", "https://telegra.ph/work-5-03-16", "https://telegra.ph/work-6-03-16",
@@ -470,16 +469,7 @@
         document.getElementById('workListX').innerHTML = buildLinks();
         document.getElementById('workListA').innerHTML = buildLinks();
 
-        // ========== ТЕМЫ ==========
-        const themeNames = [
-            'Адское пламя', 'Киберпанк', 'Яды', 'Затмение', 'Кровавая луна',
-            'Некрополис', 'Ночные твари', 'ИИ восстание', 'Глубины', 'Маски'
-        ];
-
-        function getRandomThemes() {
-            return [...themeNames].sort(() => 0.5 - Math.random()).slice(0, 5);
-        }
-
+        const themeNames = ['Адское пламя', 'Киберпанк', 'Яды', 'Затмение', 'Кровавая луна', 'Некрополис', 'Ночные твари', 'ИИ восстание', 'Глубины', 'Маски'];
         const colorSchemes = {
             'Адское пламя': { main: '#c44', bg: '#2f120a', border: '#e77', active: '#b33', glow: '#f99' },
             'Киберпанк': { main: '#5fa0ff', bg: '#0a1122', border: '#7fb0ff', active: '#3f7fdf', glow: '#aac9ff' },
@@ -520,7 +510,7 @@
 
         function fillThemes(containerId, icon) {
             const container = document.getElementById(containerId);
-            const themes = getRandomThemes();
+            const themes = [...themeNames].sort(() => 0.5 - Math.random()).slice(0, 5);
             container.innerHTML = '';
             themes.forEach(t => {
                 const card = document.createElement('div');
@@ -533,43 +523,29 @@
         fillThemes('xThemes', 'fa-biohazard');
         fillThemes('aThemes', 'fa-star-and-crescent');
 
-        // ========== КНОПКИ WORK ==========
         const workX = document.getElementById('workBtnX');
         const workA = document.getElementById('workBtnA');
         const listX = document.getElementById('workListX');
         const listA = document.getElementById('workListA');
 
-        workX.addEventListener('click', () => {
-            listA.classList.remove('show');
-            listX.classList.toggle('show');
-        });
-        workA.addEventListener('click', () => {
-            listX.classList.remove('show');
-            listA.classList.toggle('show');
-        });
+        workX.addEventListener('click', () => { listA.classList.remove('show'); listX.classList.toggle('show'); });
+        workA.addEventListener('click', () => { listX.classList.remove('show'); listA.classList.toggle('show'); });
 
-        // ========== ПЕРЕКЛЮЧЕНИЕ ТАБОВ ==========
         const tabX = document.getElementById('tabX');
         const tabA = document.getElementById('tabA');
         const paneX = document.getElementById('paneX');
         const paneA = document.getElementById('paneA');
 
         tabX.addEventListener('click', () => {
-            tabX.classList.add('active');
-            tabA.classList.remove('active');
-            paneX.classList.add('active');
-            paneA.classList.remove('active');
-            listX.classList.remove('show');
-            listA.classList.remove('show');
+            tabX.classList.add('active'); tabA.classList.remove('active');
+            paneX.classList.add('active'); paneA.classList.remove('active');
+            listX.classList.remove('show'); listA.classList.remove('show');
         });
 
         tabA.addEventListener('click', () => {
-            tabA.classList.add('active');
-            tabX.classList.remove('active');
-            paneA.classList.add('active');
-            paneX.classList.remove('active');
-            listX.classList.remove('show');
-            listA.classList.remove('show');
+            tabA.classList.add('active'); tabX.classList.remove('active');
+            paneA.classList.add('active'); paneX.classList.remove('active');
+            listX.classList.remove('show'); listA.classList.remove('show');
         });
     })();
 </script>
